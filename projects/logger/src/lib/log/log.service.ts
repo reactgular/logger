@@ -1,14 +1,19 @@
 /* tslint:disable:no-console */
-import {Inject} from '@angular/core';
+import {Inject, Optional} from '@angular/core';
+import {WINDOW} from '@ng-toolkit/universal';
 import {Observable, OperatorFunction} from 'rxjs';
 import {tap} from 'rxjs/operators';
-import {environment} from '../../../../environments/environment';
+import {LOG_CONFIG, LogConfig} from '../log-types';
 import {StackTraceService} from '../stack-trace/stack-trace.service';
-import {WINDOW} from '../window-token';
 
 const PREFIX_SEPARATOR = ':';
 
 export class LogService {
+    /**
+     * Flag if debugging is enabled.
+     */
+    private readonly _debug: boolean;
+
     /**
      * Output prefix
      */
@@ -18,14 +23,11 @@ export class LogService {
      * Allows for optional prefix.
      */
     public constructor(private stackTrace: StackTraceService,
-                       @Inject(WINDOW) private wnd: Window) {
+                       @Inject(WINDOW) private wnd: Window,
+                       @Inject(LOG_CONFIG) @Optional() private _config: LogConfig) {
         this.prefixName = '';
+        this._debug = _config ? Boolean(_config.enable) : true;
     }
-
-    /**
-     * Flag if debugging is enabled.
-     */
-    private _debug: boolean = !environment.production;
 
     public get debug(): Function {
         if (!this._debug || !console || !console.log) {
@@ -69,7 +71,7 @@ export class LogService {
     public prefix(prefix?: string): LogService {
         let log: LogService = this;
         if (prefix) {
-            log = new LogService(this.stackTrace, this.wnd);
+            log = new LogService(this.stackTrace, this.wnd, this._config);
             log.prefixName = (this.prefixName || '') + prefix + PREFIX_SEPARATOR;
         }
         return log;

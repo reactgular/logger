@@ -20,6 +20,7 @@
   ],
   "peerDependencies": {
     "@angular/common": "^7.2.0",
-    "@angular/core": "^7.2.0"
+    "@angular/core": "^7.2.0",
+    "@ng-toolkit/universal": "^7.1.2"
   }
 }
