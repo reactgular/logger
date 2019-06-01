@@ -3,7 +3,7 @@ import {Inject, Optional} from '@angular/core';
 import {WINDOW} from '@ng-toolkit/universal';
 import {Observable, OperatorFunction} from 'rxjs';
 import {tap} from 'rxjs/operators';
-import {LOG_CONFIG, LogConfig} from '../log-types';
+import {LOGGER_CONFIG, LoggerConfig} from '../logger-types';
 import {StackTraceService} from '../stack-trace/stack-trace.service';
 
 const PREFIX_SEPARATOR = ':';
@@ -24,7 +24,7 @@ export class LogService {
      */
     public constructor(private stackTrace: StackTraceService,
                        @Inject(WINDOW) private wnd: Window,
-                       @Inject(LOG_CONFIG) @Optional() private _config: LogConfig) {
+                       @Inject(LOGGER_CONFIG) @Optional() private _config: LoggerConfig) {
         this.prefixName = '';
         this._debug = _config ? Boolean(_config.enable) : true;
     }

@@ -1,5 +1,5 @@
 {
-  "name": "@reactgular/logger",
+  "name": "@reactgular/common",
   "version": "1.0.0",
   "description": "Console logging utility for Angular project.",
   "author": "reactgular.com",
@@ -7,12 +7,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/reactgular/logger"
+    "url": "https://github.com/reactgular/common"
   },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build logger",
+    "build": "ng build common",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

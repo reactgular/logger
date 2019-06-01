@@ -1,11 +1,12 @@
 import {NgModule} from '@angular/core';
-import {LogService} from './log/log.service';
-import {StackTraceService} from './stack-trace/stack-trace.service';
+import {LoggerModule} from './logger/logger.module';
 
 @NgModule({
-    providers: [
-        LogService,
-        StackTraceService
+    imports: [
+        LoggerModule
+    ],
+    exports: [
+        LoggerModule
     ]
 })
 export class CommonModule {
