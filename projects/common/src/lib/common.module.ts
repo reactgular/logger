@@ -8,5 +8,5 @@ import {StackTraceService} from './stack-trace/stack-trace.service';
         StackTraceService
     ]
 })
-export class LoggerModule {
+export class CommonModule {
 }
