@@ -19,11 +19,11 @@
       "dom"
     ],
     "paths": {
-      "@reactgular/common": [
-        "dist/common"
+      "@reactgular/logger": [
+        "dist/logger"
       ],
-      "@reactgular/common/*": [
-        "dist/common/*"
+      "@reactgular/logger/*": [
+        "dist/logger/*"
       ]
     }
   }

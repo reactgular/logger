@@ -1,5 +1,5 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../tsconfig.json",
   "compilerOptions": {
     "outDir": "../../out-tsc/lib",
     "target": "es2015",
@@ -26,7 +26,7 @@
     "enableResourceInlining": true
   },
   "exclude": [
-    "src/test.ts",
+    "./logger/test.ts",
     "**/*.spec.ts"
   ]
 }

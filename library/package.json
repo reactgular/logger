@@ -1,5 +1,5 @@
 {
-  "name": "@reactgular/common",
+  "name": "@reactgular/logger",
   "version": "1.0.0",
   "description": "Console logging utility for Angular project.",
   "author": "reactgular.com",
@@ -7,10 +7,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/reactgular/common"
+    "url": "https://github.com/reactgular/logger"
   },
   "bugs": {
-    "url": "https://github.com/reactgular/common/issues"
+    "url": "https://github.com/reactgular/logger/issues"
   },
   "keywords": [
     "angular",
