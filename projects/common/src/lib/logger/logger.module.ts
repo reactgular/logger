@@ -1,10 +1,10 @@
 import {NgModule} from '@angular/core';
-import {LogService} from './log/log.service';
+import {LoggerService} from './log/loggerService';
 import {StackTraceService} from './stack-trace/stack-trace.service';
 
 @NgModule({
     providers: [
-        LogService,
+        LoggerService,
         StackTraceService
     ]
 })

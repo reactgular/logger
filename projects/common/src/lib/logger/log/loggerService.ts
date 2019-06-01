@@ -8,7 +8,7 @@ import {StackTraceService} from '../stack-trace/stack-trace.service';
 
 const PREFIX_SEPARATOR = ':';
 
-export class LogService {
+export class LoggerService {
     /**
      * Flag if debugging is enabled.
      */
@@ -68,10 +68,10 @@ export class LogService {
     /**
      * Creates a new logger with the given prefix in all output messages.
      */
-    public prefix(prefix?: string): LogService {
-        let log: LogService = this;
+    public prefix(prefix?: string): LoggerService {
+        let log: LoggerService = this;
         if (prefix) {
-            log = new LogService(this.stackTrace, this.wnd, this._config);
+            log = new LoggerService(this.stackTrace, this.wnd, this._config);
             log.prefixName = (this.prefixName || '') + prefix + PREFIX_SEPARATOR;
         }
         return log;
@@ -110,7 +110,7 @@ export class LogService {
     /**
      * Creates a logger with an automatic prefix.
      */
-    public withPrefix(prefix: string): LogService {
+    public withPrefix(prefix: string): LoggerService {
         if (!this._debug) {
             return this;
         }
