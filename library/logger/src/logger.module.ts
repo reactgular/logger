@@ -1,7 +1,7 @@
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {NgtUniversalModule} from '@ng-toolkit/universal';
-import {LoggerService} from './logger/loggerService';
+import {LoggerService} from './logger/logger.service';
 import {StackTraceService} from './stack-trace/stack-trace.service';
 
 @NgModule({
