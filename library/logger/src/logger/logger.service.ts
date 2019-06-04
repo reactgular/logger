@@ -3,6 +3,7 @@ import {Inject, Optional} from '@angular/core';
 import {Observable, OperatorFunction} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {ConsoleMethod, ConsoleMethods, ConsoleNoop, Logger, LOGGER_CONFIG, LOGGER_CONSOLE, LoggerConfig} from '../logger-types';
+import {PrefixService} from '../prefix/prefix.service';
 
 const PREFIX_SEPARATOR = ':';
 
@@ -10,7 +11,7 @@ export class LoggerService implements Logger {
     /**
      * Global access to a logger.
      */
-    public static Logger: LoggerService = new LoggerService({}, console);
+    public static Logger: LoggerService = new LoggerService({}, console, new PrefixService({}));
 
     /**
      * Configuration
@@ -26,10 +27,12 @@ export class LoggerService implements Logger {
      * Allows for optional prefix.
      */
     public constructor(@Inject(LOGGER_CONFIG) @Optional() config: Partial<LoggerConfig>,
-                       @Inject(LOGGER_CONSOLE) private _console: Console) {
+                       @Inject(LOGGER_CONSOLE) private _console: Console,
+                       private _prefixService: PrefixService) {
         this._prefixName = '';
         this._config = Object.assign({
             debug: true,
+            tails: [],
             log: true,
             error: true,
             info: true,
@@ -55,6 +58,14 @@ export class LoggerService implements Logger {
 
     public get warn(): ConsoleMethod<void> {
         return this._method('warn');
+    }
+
+    /**
+     * Changes the loggers prefix.
+     */
+    public setPrefix(value: string): Logger {
+        this._prefixName = value;
+        return this;
     }
 
     /**
@@ -87,19 +98,16 @@ export class LoggerService implements Logger {
         };
     }
 
-    public tap<T>(): ConsoleMethods<OperatorFunction<T, T>> {
+    public tap<T, R>(mapper: (T) => R): ConsoleMethods<OperatorFunction<R, R>> {
         return undefined;
     }
 
     /**
      * Creates a logger with an automatic prefix.
      */
-    public withPrefix(value?: string): Logger {
-        // Will be "unknown" in all IE browsers if class name is used.
-        const prefix = (value || 'unknown').replace(/(Component|Directive|Service|Factory|Pipe|Resource|Module|Resolver|Provider)$/, '');
-        const log = new LoggerService(this._config, this._console);
-        log.setPrefix((this._prefixName || '') + prefix + PREFIX_SEPARATOR);
-        return log;
+    public withPrefix(value?: string, seperator?: string): Logger {
+        return new LoggerService(this._config, this._console, this._prefixService)
+            .setPrefix(this._prefixName + this._prefixService.prefix(value) + (seperator || PREFIX_SEPARATOR));
     }
 
     private _method(name: string): ConsoleMethod<void> {
@@ -109,12 +117,5 @@ export class LoggerService implements Logger {
         return this._prefixName
             ? this._console[name].bind(this._console, this._prefixName)
             : this._console[name].bind(this._console);
-    }
-
-    /**
-     * Changes the loggers prefix.
-     */
-    private setPrefix(value: string) {
-        this._prefixName = value;
     }
 }

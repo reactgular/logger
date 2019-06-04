@@ -19,6 +19,7 @@ export interface LoggerConfig {
     error: boolean;
     info: boolean;
     log: boolean;
+    tails: string[];
     warn: boolean;
 }
 
@@ -48,10 +49,18 @@ export interface ConsoleMethods<TReturn> {
  * Defines a logger service interface.
  */
 export interface Logger extends ConsoleMethods<void> {
-    tap<T>(): ConsoleMethods<OperatorFunction<T, T>>;
+    /**
+     * Sets the prefix of this log service.
+     */
+    setPrefix(prefix?: string): Logger;
+
+    /**
+     * Taps an observable and logs output.
+     */
+    tap<T, R>(mapper?: (T) => R): ConsoleMethods<OperatorFunction<T, T>>;
 
     /**
      * Creates a new logger service with the appended prefix.
      */
-    withPrefix(prefix?: string): Logger;
+    withPrefix(prefix?: string, seperator?: string): Logger;
 }

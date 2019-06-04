@@ -8,6 +8,22 @@
       "sourceRoot": "library/logger/src",
       "projectType": "library",
       "prefix": "rg",
+      "schematics": {
+        "@schematics/angular:component": {
+          "styleext": "scss",
+          "changeDetection": "OnPush",
+          "flat": false
+        },
+        "@schematics/angular:pipe": {
+          "flat": false
+        },
+        "@schematics/angular:directive": {
+          "flat": false
+        },
+        "@schematics/angular:service": {
+          "flat": false
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
