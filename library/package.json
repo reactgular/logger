@@ -1,6 +1,6 @@
 {
   "name": "@reactgular/logger",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Console logging utility for Angular project.",
   "author": "reactgular.com",
   "homepage": "https://reactgular.com/",
@@ -20,7 +20,6 @@
   ],
   "peerDependencies": {
     "@angular/common": "^8.0.0",
-    "@angular/core": "^8.0.0",
-    "@ng-toolkit/universal": "^7.1.2"
+    "@angular/core": "^8.0.0"
   }
 }

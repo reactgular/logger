@@ -9,10 +9,8 @@ easier and more verbose.
 
 # Installation
 
-Logger requires the ngToolkit library.
-
 ```
-npm install --save @reactgular/logger @ng-toolkit/universal
+npm install --save @reactgular/logger
 ```
 
 # Usage

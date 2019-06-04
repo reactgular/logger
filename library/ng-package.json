@@ -4,8 +4,7 @@
   "lib": {
     "entryFile": "logger/public-api.ts",
     "umdModuleIds": {
-      "@reactgular/logger": "logger",
-      "@ng-toolkit/universal": "universal"
+      "@reactgular/logger": "logger"
     }
   }
 }
