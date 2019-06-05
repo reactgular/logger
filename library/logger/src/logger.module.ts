@@ -1,5 +1,6 @@
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
+import {LOGGER_CONSOLE} from './logger-types';
 import {LoggerService} from './logger/logger.service';
 
 @NgModule({
@@ -7,7 +8,8 @@ import {LoggerService} from './logger/logger.service';
         CommonModule
     ],
     providers: [
-        LoggerService
+        LoggerService,
+        {provide: LOGGER_CONSOLE, useValue: console}
     ]
 })
 export class LoggerModule {

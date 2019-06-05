@@ -1,9 +1,8 @@
 /* tslint:disable:no-this._console */
 import {Inject, Optional} from '@angular/core';
-import {Observable, OperatorFunction} from 'rxjs';
-import {tap} from 'rxjs/operators';
-import {ConsoleMethod, ConsoleMethods, ConsoleNoop, Logger, LOGGER_CONFIG, LOGGER_CONSOLE, LoggerConfig} from '../logger-types';
+import {ConsoleMethod, ConsoleMethods, ConsoleNoop, Logger, LOGGER_CONFIG, LOGGER_CONSOLE, LoggerConfig, TapLogger} from '../logger-types';
 import {PrefixService} from '../prefix/prefix.service';
+import {Tapper} from '../tapper/tapper';
 
 const PREFIX_SEPARATOR = ':';
 
@@ -27,7 +26,7 @@ export class LoggerService implements Logger {
      * Allows for optional prefix.
      */
     public constructor(@Inject(LOGGER_CONFIG) @Optional() config: Partial<LoggerConfig>,
-                       @Inject(LOGGER_CONSOLE) private _console: Console,
+                       @Inject(LOGGER_CONSOLE) private _console: ConsoleMethods<void>,
                        private _prefixService: PrefixService) {
         this._prefixName = '';
         this._config = Object.assign({
@@ -61,6 +60,13 @@ export class LoggerService implements Logger {
     }
 
     /**
+     * Gets the current prefix.
+     */
+    public getPrefix(): string {
+        return this._prefixName;
+    }
+
+    /**
      * Changes the loggers prefix.
      */
     public setPrefix(value: string): Logger {
@@ -69,37 +75,10 @@ export class LoggerService implements Logger {
     }
 
     /**
-     * Creates an observable operator that tags into the stream and logs values.
+     * Creates a tapper object that can log output from an observable.
      */
-    public streamDebug<T>(...args): OperatorFunction<T, T> {
-        if (!this._config.debug || !this._console || !this._console.log) {
-            return (source: Observable<T>): Observable<T> => source;
-        }
-        return (source: Observable<T>): Observable<T> => {
-            return source.pipe(tap(value => {
-                const prefix = this._prefixName ? this._prefixName.replace(/:$/, '') + '$' : '$';
-                this._console.debug(...[prefix, ...args, value]);
-            }));
-        };
-    }
-
-    /**
-     * Creates an observable operator that tags into the stream and logs values.
-     */
-    public streamError<T>(...args): OperatorFunction<T, T> {
-        if (!this._config.error || !this._console || !this._console.log) {
-            return (source: Observable<T>): Observable<T> => source;
-        }
-        return (source: Observable<T>): Observable<T> => {
-            return source.pipe(tap(value => {
-                const prefix = this._prefixName ? this._prefixName.replace(/:$/, '') + '$' : '$';
-                this._console.error(...[prefix, ...args, value]);
-            }));
-        };
-    }
-
-    public tap<T, R>(mapper: (T) => R): ConsoleMethods<OperatorFunction<R, R>> {
-        return undefined;
+    public tap<T>(mapper?: (T) => any): TapLogger<T> {
+        return new Tapper<T>(this.withPrefix('$'), mapper || ((value) => value));
     }
 
     /**
