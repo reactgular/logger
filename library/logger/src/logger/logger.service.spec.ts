@@ -63,7 +63,7 @@ describe(LoggerService.name, () => {
 
         it('prefix should end with $', () => {
             const log: LoggerService = TestBed.get(LoggerService);
-            const prefix = log.withPrefix('App').withPrefix('Widget').tap().getLogger().getPrefix();
+            const prefix = log.withPrefix('App').withPrefix('Widget').tap().logger().getPrefix();
             expect(prefix).toBe('App:Widget$');
         });
     });

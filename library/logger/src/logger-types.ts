@@ -57,3 +57,13 @@ export interface ConsoleMethods<TReturn> {
      */
     warn: ConsoleMethod<TReturn>;
 }
+
+/**
+ * Defines the pipe method used by tap operators to react to values from an observable.
+ */
+export interface TapOperator<TIn, TOut> {
+    /**
+     * An operator can react to the value emitted by an observable, and then pass the value to the next operator.
+     */
+    pipe(value: TIn, next: (value: TOut) => void);
+}
