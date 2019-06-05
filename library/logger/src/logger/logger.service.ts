@@ -78,7 +78,9 @@ export class LoggerService implements ConsoleMethods<void> {
      * Creates a tapper object that can log output from an observable.
      */
     public tap<T>(mapper?: (T) => any): Tapper<T> {
-        return new Tapper<T>(this.withPrefix('$'), mapper || ((value) => value));
+        const log = this.withPrefix('$', '');
+        log.setPrefix(log.getPrefix().replace(/(:\$)$/, '$'));
+        return new Tapper<T>(log, mapper);
     }
 
     /**
@@ -86,7 +88,7 @@ export class LoggerService implements ConsoleMethods<void> {
      */
     public withPrefix(value?: string, seperator?: string): LoggerService {
         return new LoggerService(this._config, this._console, this._prefixService)
-            .setPrefix(this._prefixName + this._prefixService.prefix(value) + (seperator || PREFIX_SEPARATOR));
+            .setPrefix(this._prefixName + this._prefixService.prefix(value) + (seperator === undefined ? PREFIX_SEPARATOR : seperator));
     }
 
     private _method(name: string): ConsoleMethod<void> {

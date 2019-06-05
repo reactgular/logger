@@ -1,6 +1,7 @@
 import {TestBed} from '@angular/core/testing';
 import {MockConsole} from '../../tests/mock-console';
 import {LOGGER_CONFIG, LOGGER_CONSOLE} from '../logger-types';
+import {Tapper} from '../tapper/tapper';
 import {LoggerService} from './logger.service';
 
 describe(LoggerService.name, () => {
@@ -54,6 +55,17 @@ describe(LoggerService.name, () => {
     });
 
     describe('tapping', () => {
+        it('should create a tapper', () => {
+            const log: LoggerService = TestBed.get(LoggerService);
+            const tapper = log.tap();
+            expect(tapper instanceof Tapper).toBeTruthy();
+        });
+
+        it('prefix should end with $', () => {
+            const log: LoggerService = TestBed.get(LoggerService);
+            const prefix = log.withPrefix('App').withPrefix('Widget').tap().getLogger().getPrefix();
+            expect(prefix).toBe('App:Widget$');
+        });
     });
 });
 

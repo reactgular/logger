@@ -6,6 +6,9 @@ import {LoggerService} from '../logger/logger.service';
 import {Tapper} from './tapper';
 
 describe(Tapper.name, () => {
+    let mock: MockConsole;
+    let log: LoggerService;
+
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
@@ -14,42 +17,26 @@ describe(Tapper.name, () => {
                 {provide: LOGGER_CONSOLE, useValue: new MockConsole()}
             ]
         });
-    });
-
-    it('prefix should end with $', () => {
-        const log: LoggerService = TestBed.get(LoggerService);
-        const prefix = log.withPrefix('App').withPrefix('Widget').tap().getLogger().getPrefix();
-        expect(prefix).toBe('App:Widget$');
+        log = TestBed.get(LoggerService);
+        mock = TestBed.get(LOGGER_CONSOLE);
     });
 
     it('should have console methods', () => {
-        const log: LoggerService = TestBed.get(LoggerService);
-        const tapper = log.tap();
-        MockConsole.METHODS.forEach(name => {
-            expect(typeof tapper[name]).toBe('function');
-        });
+        const tapper = new Tapper(log);
+        MockConsole.METHODS.forEach(name => expect(typeof tapper[name]).toBe('function'));
     });
 
     MockConsole.METHODS.forEach(name => {
         it(`should call console.${name}() method from observable`, () => {
-            const mock: MockConsole = TestBed.get(LOGGER_CONSOLE);
-            const log: LoggerService = TestBed.get(LoggerService);
-            const tapper = log.tap();
-            expect(typeof tapper[name]).toBe('function');
-
-            of('hello').pipe(tapper[name]()).subscribe();
-
-            console.log(mock.buffer);
+            const tapper = new Tapper(log);
+            const args = ['hello'];
+            of(...args).pipe(tapper[name]()).subscribe();
+            expect(mock.buffer).toEqual([{name, args}]);
         });
     });
 
     it('should map values', () => {
-        const mock: MockConsole = TestBed.get(LOGGER_CONSOLE);
-        let log: LoggerService = TestBed.get(LoggerService);
-        log = log.withPrefix('App').withPrefix('Widget');
-
-        of({value: 'hello'}).pipe(
-            log.tap(v => v.value).debug()
-        ).subscribe();
+        of({value: 'hello'}).pipe(log.tap(v => v.value).debug()).subscribe();
+        expect(mock.buffer).toEqual([{name: 'debug', args: ['$', 'hello']}]);
     });
 });

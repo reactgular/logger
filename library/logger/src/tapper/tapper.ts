@@ -5,12 +5,14 @@ import {LoggerService} from '../logger/logger.service';
 
 export class Tapper<TType> implements ConsoleMethods<OperatorFunction<TType, TType>> {
 
+    private readonly _mapper: (T) => any;
+
     /**
      * Constructor
      */
     public constructor(private _logger: LoggerService,
-                       private _mapper: (T) => any) {
-        console.error('here');
+                       mapper?: (T) => any) {
+        this._mapper = mapper || ((value) => value);
     }
 
     public get debug(): ConsoleMethod<OperatorFunction<TType, TType>> {
