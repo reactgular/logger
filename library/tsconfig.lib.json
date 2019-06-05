@@ -27,6 +27,7 @@
   },
   "exclude": [
     "./logger/test.ts",
+    "./logger/tests/**/*",
     "**/*.spec.ts"
   ]
 }

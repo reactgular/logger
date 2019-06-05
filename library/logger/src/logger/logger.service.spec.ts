@@ -1,42 +1,9 @@
 import {TestBed} from '@angular/core/testing';
-import {of} from 'rxjs';
-import {ConsoleMethod, ConsoleMethods, Logger, LOGGER_CONFIG, LOGGER_CONSOLE} from '../logger-types';
+import {MockConsole} from '../../tests/mock-console';
+import {LOGGER_CONFIG, LOGGER_CONSOLE} from '../logger-types';
 import {LoggerService} from './logger.service';
 
-class MockConsole implements ConsoleMethods<void> {
-    public buffer: Array<{ name: string, args: any[] }> = [];
-
-    public get debug(): ConsoleMethod<void> {
-        return this._method('debug');
-    }
-
-    public get error(): ConsoleMethod<void> {
-        return this._method('error');
-    }
-
-    public get info(): ConsoleMethod<void> {
-        return this._method('info');
-    }
-
-    public get log(): ConsoleMethod<void> {
-        return this._method('log');
-    }
-
-    public get warn(): ConsoleMethod<void> {
-        return this._method('warn');
-    }
-
-    private _method(name: string): ConsoleMethod<void> {
-        return (...args: any[]): void => {
-            this.buffer.push({name, args});
-        };
-    }
-
-}
-
 describe(LoggerService.name, () => {
-    const methods = ['debug', 'warn', 'info', 'log', 'error'];
-
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
@@ -48,7 +15,7 @@ describe(LoggerService.name, () => {
     });
 
     describe('console', () => {
-        methods.forEach(name => {
+        MockConsole.METHODS.forEach(name => {
             it(`should call console.${name}() method`, () => {
                 const mock: MockConsole = TestBed.get(LOGGER_CONSOLE);
                 const log: LoggerService = TestBed.get(LoggerService);
@@ -71,7 +38,7 @@ describe(LoggerService.name, () => {
         });
 
         it('should create a new logger with prefix', () => {
-            let log: Logger = TestBed.get(LoggerService);
+            let log: LoggerService = TestBed.get(LoggerService);
             expect(log.getPrefix()).toBe('');
             log = log.withPrefix('AppComponent');
             expect(log.getPrefix()).toBe('App:');
@@ -80,49 +47,13 @@ describe(LoggerService.name, () => {
         });
 
         it('should use a separator', () => {
-            let log: Logger = TestBed.get(LoggerService);
+            let log: LoggerService = TestBed.get(LoggerService);
             log = log.withPrefix('AppComponent', '@');
             expect(log.getPrefix()).toBe('App@');
         });
     });
 
     describe('tapping', () => {
-        it('prefix should end with $', () => {
-            const log: LoggerService = TestBed.get(LoggerService);
-            const prefix = log.withPrefix('App').withPrefix('Widget').tap().getLogger().getPrefix();
-            expect(prefix).toBe('App:Widget$');
-        });
-
-        it('should have console methods', () => {
-            const log: LoggerService = TestBed.get(LoggerService);
-            const tapper = log.tap();
-            methods.forEach(name => {
-                expect(typeof tapper[name]).toBe('function');
-            });
-        });
-
-        methods.forEach(name => {
-            it(`should call console.${name}() method from observable`, () => {
-                const mock: MockConsole = TestBed.get(LOGGER_CONSOLE);
-                const log: LoggerService = TestBed.get(LoggerService);
-                const tapper = log.tap();
-                expect(typeof tapper[name]).toBe('function');
-
-                of('hello').pipe(tapper[name]()).subscribe();
-
-                console.log(mock.buffer);
-            });
-        });
-
-        it('should map values', () => {
-            const mock: MockConsole = TestBed.get(LOGGER_CONSOLE);
-            let log: Logger = TestBed.get(LoggerService);
-            log = log.withPrefix('App').withPrefix('Widget');
-
-            of({value: 'hello'}).pipe(
-                log.tap(v => v.value).debug()
-            ).subscribe();
-        });
     });
 });
 

@@ -1,5 +1,4 @@
 import {InjectionToken} from '@angular/core';
-import {OperatorFunction} from 'rxjs';
 
 /**
  * Token to inject the logger configuration.
@@ -57,36 +56,4 @@ export interface ConsoleMethods<TReturn> {
      * Defined as a function property to ensure console logs the correct file/line reference.
      */
     warn: ConsoleMethod<TReturn>;
-}
-
-/**
- * Defines a logger service interface.
- */
-export interface Logger extends ConsoleMethods<void> {
-    /**
-     * Gets the prefix of this log service.
-     */
-    getPrefix(): string;
-
-    /**
-     * Sets the prefix of this log service.
-     */
-    setPrefix(prefix?: string): Logger;
-
-    /**
-     * Taps an observable and logs output.
-     */
-    tap<T>(mapper?: (T) => any): TapLogger<T>;
-
-    /**
-     * Creates a new logger service with the appended prefix.
-     */
-    withPrefix(prefix?: string, seperator?: string): Logger;
-}
-
-export interface TapLogger<T> extends ConsoleMethods<OperatorFunction<T, T>> {
-    /**
-     * Gets the logger associated with the tapper.
-     */
-    getLogger(): Logger;
 }

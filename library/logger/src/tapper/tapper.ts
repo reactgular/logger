@@ -1,13 +1,14 @@
 import {Observable, OperatorFunction} from 'rxjs';
 import {tap} from 'rxjs/operators';
-import {ConsoleMethod, Logger, TapLogger} from '../logger-types';
+import {ConsoleMethod, ConsoleMethods} from '../logger-types';
+import {LoggerService} from '../logger/logger.service';
 
-export class Tapper<TType> implements TapLogger<TType> {
+export class Tapper<TType> implements ConsoleMethods<OperatorFunction<TType, TType>> {
 
     /**
      * Constructor
      */
-    public constructor(private _logger: Logger,
+    public constructor(private _logger: LoggerService,
                        private _mapper: (T) => any) {
         console.error('here');
     }
@@ -35,7 +36,7 @@ export class Tapper<TType> implements TapLogger<TType> {
     /**
      * Gets the logger associated with the tapper.
      */
-    public getLogger(): Logger {
+    public getLogger(): LoggerService {
         return this._logger;
     }
 

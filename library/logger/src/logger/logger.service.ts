@@ -1,16 +1,16 @@
 /* tslint:disable:no-this._console */
 import {Inject, Optional} from '@angular/core';
-import {ConsoleMethod, ConsoleMethods, ConsoleNoop, Logger, LOGGER_CONFIG, LOGGER_CONSOLE, LoggerConfig, TapLogger} from '../logger-types';
+import {ConsoleMethod, ConsoleMethods, ConsoleNoop, LOGGER_CONFIG, LOGGER_CONSOLE, LoggerConfig} from '../logger-types';
 import {PrefixService} from '../prefix/prefix.service';
 import {Tapper} from '../tapper/tapper';
 
 const PREFIX_SEPARATOR = ':';
 
-export class LoggerService implements Logger {
+export class LoggerService implements ConsoleMethods<void> {
     /**
      * Global access to a logger.
      */
-    public static Logger: LoggerService = new LoggerService({}, console, new PrefixService({}));
+    public static Logger: LoggerService = new LoggerService({}, console, new PrefixService());
 
     /**
      * Configuration
@@ -69,7 +69,7 @@ export class LoggerService implements Logger {
     /**
      * Changes the loggers prefix.
      */
-    public setPrefix(value: string): Logger {
+    public setPrefix(value: string): LoggerService {
         this._prefixName = value;
         return this;
     }
@@ -77,14 +77,14 @@ export class LoggerService implements Logger {
     /**
      * Creates a tapper object that can log output from an observable.
      */
-    public tap<T>(mapper?: (T) => any): TapLogger<T> {
+    public tap<T>(mapper?: (T) => any): Tapper<T> {
         return new Tapper<T>(this.withPrefix('$'), mapper || ((value) => value));
     }
 
     /**
      * Creates a logger with an automatic prefix.
      */
-    public withPrefix(value?: string, seperator?: string): Logger {
+    public withPrefix(value?: string, seperator?: string): LoggerService {
         return new LoggerService(this._config, this._console, this._prefixService)
             .setPrefix(this._prefixName + this._prefixService.prefix(value) + (seperator || PREFIX_SEPARATOR));
     }

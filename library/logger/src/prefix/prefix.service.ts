@@ -16,7 +16,7 @@ export class PrefixService {
     /**
      * Constructor
      */
-    public constructor(@Inject(LOGGER_CONFIG) @Optional() config: Partial<LoggerConfig>) {
+    public constructor(@Inject(LOGGER_CONFIG) @Optional() config?: LoggerConfig) {
         const defaultTails = ['Component', 'Directive', 'Service', 'Factory', 'Pipe', 'Module', 'Resolver', 'Provider'];
         const tails = (config && config.tails) || defaultTails;
         this.addTails(tails);
