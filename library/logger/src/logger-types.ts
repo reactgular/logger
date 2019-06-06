@@ -59,11 +59,35 @@ export interface ConsoleMethods<TReturn> {
 }
 
 /**
+ * Describes a subscriber to an observable.
+ */
+interface TapSubscriber {
+    /**
+     * Counts how many subscribers. This counter increments when an emitted value is received by the tapper. It is
+     * not an accurate count of subscribers.
+     */
+    ref: number;
+    /**
+     * A unique hash ID for this subscriber.
+     */
+    id: string;
+}
+
+/**
  * Payload from observable.
  */
 export interface TapValue<TType> {
+    /**
+     * Counts how many values have been emitted. First item starts from 1.
+     */
     count: number;
-    id: { value: string, show: boolean };
+    /**
+     * Describes the subscriber to the observable.
+     */
+    subscriber: TapSubscriber;
+    /**
+     * The observable payload.
+     */
     value: TType;
 }
 
