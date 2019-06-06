@@ -68,7 +68,7 @@ export interface TapSubscriber {
      */
     ref: number;
     /**
-     * A unique hash ID for this subscriber.
+     * A unique ID for this subscriber.
      */
     id: string;
 }

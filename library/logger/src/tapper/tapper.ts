@@ -46,13 +46,6 @@ export class Tapper<TObservable, TOperator> {
     }
 
     /**
-     * Adds a unique ID code to each subscriber of the observable stream.
-     */
-    public id(): Tapper<TObservable, TOperator> {
-
-    }
-
-    /**
      * Prints info messages to the console.
      */
     public info(...args: any[]): OperatorFunction<TObservable, TObservable> {

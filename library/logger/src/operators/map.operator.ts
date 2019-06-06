@@ -6,7 +6,7 @@ export class MapOperator<TIn, TOut> implements TapOperator<TIn, TOut> {
 
     }
 
-    public pipe({count, payload}: TapPayload<TIn>, next: (value: TapPayload<TOut>) => void) {
-        next({count, payload: this._mapper(payload)});
+    public pipe(value: TapPayload<TIn>, next: (value: TapPayload<TOut>) => void) {
+        next({...value, payload: this._mapper(value.payload)});
     }
 }
