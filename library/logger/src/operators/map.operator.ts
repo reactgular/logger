@@ -1,4 +1,4 @@
-import {TapOperator} from '../logger-types';
+import {TapOperator, TapValue} from '../logger-types';
 
 export class MapOperator<TIn, TOut> implements TapOperator<TIn, TOut> {
 
@@ -6,7 +6,7 @@ export class MapOperator<TIn, TOut> implements TapOperator<TIn, TOut> {
 
     }
 
-    public pipe(value: TIn, next: (value: TOut) => void) {
-        next(this._mapper(value));
+    public pipe({count, value}: TapValue<TIn>, next: (value: TapValue<TOut>) => void) {
+        next({count, value: this._mapper(value)});
     }
 }

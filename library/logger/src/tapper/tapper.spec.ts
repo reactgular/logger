@@ -39,4 +39,25 @@ describe(Tapper.name, () => {
         of({value: 'hello'}).pipe(log.tap(v => v.value).debug()).subscribe();
         expect(mock.buffer).toEqual([{name: 'debug', args: ['$', 'hello']}]);
     });
+
+    it('should filter values', () => {
+        of(1, 2, 3, 4, 5).pipe(log.tap().filter(v => v >= 3).debug()).subscribe();
+        expect(mock.buffer).toEqual([
+            {name: 'debug', args: ['$', 3]},
+            {name: 'debug', args: ['$', 4]},
+            {name: 'debug', args: ['$', 5]}
+        ]);
+    });
+
+    it('should log first value', () => {
+        const observe$ = of(1, 2, 3, 4, 5).pipe(log.tap().first().debug());
+        observe$.subscribe();
+        observe$.subscribe();
+        observe$.subscribe();
+        expect(mock.buffer).toEqual([
+            {name: 'debug', args: ['$', 1]},
+            {name: 'debug', args: ['$', 1]},
+            {name: 'debug', args: ['$', 1]}
+        ]);
+    });
 });

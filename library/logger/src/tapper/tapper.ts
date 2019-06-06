@@ -1,5 +1,5 @@
 import {Observable, OperatorFunction} from 'rxjs';
-import {tap} from 'rxjs/operators';
+import {map, scan, tap} from 'rxjs/operators';
 import {TapOperator} from '../logger-types';
 import {LoggerService} from '../logger/logger.service';
 import {FilterOperator} from '../operators/filter.operator';
@@ -8,7 +8,6 @@ import {LogOperator} from '../operators/log.operator';
 import {MapOperator} from '../operators/map.operator';
 
 export class Tapper<TObservable, TOperator> {
-
     /**
      * A list of operators for this tapper instance.
      */
@@ -22,10 +21,16 @@ export class Tapper<TObservable, TOperator> {
         this._operators = operators || [];
     }
 
+    /**
+     * Prints debug messages to the console.
+     */
     public debug(...args: any[]): OperatorFunction<TObservable, TObservable> {
         return this._finish(new LogOperator('debug', this._logger, args));
     }
 
+    /**
+     * Prints error messages to the console.
+     */
     public error(...args: any[]): OperatorFunction<TObservable, TObservable> {
         return this._finish(new LogOperator('error', this._logger, args));
     }
@@ -38,10 +43,16 @@ export class Tapper<TObservable, TOperator> {
         return this._next(new FirstOperator());
     }
 
+    /**
+     * Prints info messages to the console.
+     */
     public info(...args: any[]): OperatorFunction<TObservable, TObservable> {
         return this._finish(new LogOperator('info', this._logger, args));
     }
 
+    /**
+     * Prints log messages to the console.
+     */
     public log(...args: any[]): OperatorFunction<TObservable, TObservable> {
         return this._finish(new LogOperator('log', this._logger, args));
     }
@@ -57,6 +68,9 @@ export class Tapper<TObservable, TOperator> {
         return this._next<TReturn>(new MapOperator<TOperator, TReturn>(mapper));
     }
 
+    /**
+     * Prints warn messages to the console.
+     */
     public warn(...args: any[]): OperatorFunction<TObservable, TObservable> {
         return this._finish(new LogOperator('warn', this._logger, args));
     }
@@ -74,7 +88,11 @@ export class Tapper<TObservable, TOperator> {
         }
 
         return (source: Observable<TObservable>) => {
-            return source.pipe(tap(value => tapNext(value, 0)));
+            return source.pipe(
+                scan((acc, value) => ({count: acc.count + 1, value}), {count: 0, value: null}),
+                tap(value => tapNext(value, 0)),
+                map(value => value.value)
+            );
         };
     }
 
