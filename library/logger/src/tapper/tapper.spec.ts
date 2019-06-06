@@ -1,5 +1,6 @@
 import {TestBed} from '@angular/core/testing';
 import {of} from 'rxjs';
+import {filter, first, map} from 'rxjs/operators';
 import {MockConsole} from '../../tests/mock-console';
 import {LOGGER_CONFIG, LOGGER_CONSOLE} from '../logger-types';
 import {LoggerService} from '../logger/logger.service';
@@ -36,12 +37,18 @@ describe(Tapper.name, () => {
     });
 
     it('should map values', () => {
-        of({value: 'hello'}).pipe(log.tap(v => v.payload).debug()).subscribe();
+        of({value: 'hello'}).pipe(
+            log.tap().pipe(map(v => v.value)).debug()
+        ).subscribe();
+
         expect(mock.buffer).toEqual([{name: 'debug', args: ['$', 'hello']}]);
     });
 
     it('should filter values', () => {
-        of(1, 2, 3, 4, 5).pipe(log.tap().filter(v => v >= 3).debug()).subscribe();
+        of(1, 2, 3, 4, 5).pipe(
+            log.tap().pipe(filter(v => v >= 3)).debug()
+        ).subscribe();
+
         expect(mock.buffer).toEqual([
             {name: 'debug', args: ['$', 3]},
             {name: 'debug', args: ['$', 4]},
@@ -49,14 +56,12 @@ describe(Tapper.name, () => {
         ]);
     });
 
-    it('should log first value', () => {
-        const observe$ = of(1, 2, 3, 4, 5).pipe(log.tap().first().debug());
-        observe$.subscribe();
-        observe$.subscribe();
-        observe$.subscribe();
+    it('should log first value for each subscription', () => {
+        of(1, 2, 3, 4, 5).pipe(
+            log.tap().pipe(first()).debug()
+        ).subscribe();
+
         expect(mock.buffer).toEqual([
-            {name: 'debug', args: ['$', 1]},
-            {name: 'debug', args: ['$', 1]},
             {name: 'debug', args: ['$', 1]}
         ]);
     });

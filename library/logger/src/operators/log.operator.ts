@@ -1,9 +1,9 @@
-import {ConsoleMethods, TapOperator, TapPayload} from '../logger-types';
+import {ConsoleMethods} from '../logger-types';
 
 /**
  * Sends values from the observable to the logger.
  */
-export class LogOperator<TType> implements TapOperator<TType, TType> {
+export class LogOperator<TType> {
 
     /**
      * Constructor
@@ -16,8 +16,7 @@ export class LogOperator<TType> implements TapOperator<TType, TType> {
     /**
      * Pipes the value to the logger. Calls next but there likely aren't any more operators.
      */
-    public pipe(value: TapPayload<TType>, next: (value: TapPayload<TType>) => void) {
-        this._console[this._method](`[${value.count}]`, value.payload);
-        next(value);
+    public pipe(value: TType) {
+        this._console[this._method](value);
     }
 }

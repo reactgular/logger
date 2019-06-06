@@ -77,11 +77,10 @@ export class LoggerService implements ConsoleMethods<void> {
     /**
      * Creates a tapper object that can log output from an observable.
      */
-    public tap<TObservable, TOperator>(mapper?: (TObservable) => TOperator): Tapper<TObservable, TOperator> {
+    public tap<TObservable>(): Tapper<TObservable> {
         const log = this.withPrefix('$', '');
         log.setPrefix(log.getPrefix().replace(/(:\$)$/, '$'));
-        const tap = new Tapper<TObservable, TOperator>(log);
-        return typeof mapper === 'function' ? tap.map(mapper) : tap;
+        return new Tapper<TObservable>(log);
     }
 
     /**
