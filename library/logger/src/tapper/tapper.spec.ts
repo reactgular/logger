@@ -36,7 +36,7 @@ describe(Tapper.name, () => {
     });
 
     it('should map values', () => {
-        of({value: 'hello'}).pipe(log.tap(v => v.value).debug()).subscribe();
+        of({value: 'hello'}).pipe(log.tap(v => v.payload).debug()).subscribe();
         expect(mock.buffer).toEqual([{name: 'debug', args: ['$', 'hello']}]);
     });
 

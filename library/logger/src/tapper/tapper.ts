@@ -1,6 +1,6 @@
 import {Observable, OperatorFunction} from 'rxjs';
 import {map, scan, tap} from 'rxjs/operators';
-import {TapOperator} from '../logger-types';
+import {TapOperator, TapPayload, TapSubscriber} from '../logger-types';
 import {LoggerService} from '../logger/logger.service';
 import {FilterOperator} from '../operators/filter.operator';
 import {FirstOperator} from '../operators/first.operator';
@@ -8,6 +8,8 @@ import {LogOperator} from '../operators/log.operator';
 import {MapOperator} from '../operators/map.operator';
 
 export class Tapper<TObservable, TOperator> {
+    private static _id = 0;
+
     /**
      * A list of operators for this tapper instance.
      */
@@ -86,6 +88,7 @@ export class Tapper<TObservable, TOperator> {
      * Creates the observable operator that will tab into the stream.
      */
     private _finish(op: TapOperator<TOperator, TOperator>): OperatorFunction<TObservable, TObservable> {
+        let ref = 0;
         const operators = this._next(op)._operators;
 
         function tapNext(value, indx: number) {
@@ -94,15 +97,23 @@ export class Tapper<TObservable, TOperator> {
             }
         }
 
+        function createSubscriber(): TapSubscriber {
+            ref++;
+            const id = `${Tapper._id++}:${ref}`;
+            return {ref, id};
+        }
+
         return (source: Observable<TObservable>) => {
             return source.pipe(
-                scan((acc, value) => ({count: acc.count + 1, value, id: acc.id}), {
-                    count: 0,
-                    value: null,
-                    id: {value: '12345', show: false}
-                }),
+                scan<TObservable, TapPayload<TObservable>>(
+                    (acc, payload) => ({...acc, count: acc.count + 1, payload}), {
+                        count: 0,
+                        payload: null,
+                        subscriber: createSubscriber()
+                    }
+                ),
                 tap(value => tapNext(value, 0)),
-                map(value => value.value)
+                map(value => value.payload)
             );
         };
     }

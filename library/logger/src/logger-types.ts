@@ -59,9 +59,9 @@ export interface ConsoleMethods<TReturn> {
 }
 
 /**
- * Describes a subscriber to an observable.
+ * Describes a subscriber of an observable.
  */
-interface TapSubscriber {
+export interface TapSubscriber {
     /**
      * Counts how many subscribers. This counter increments when an emitted value is received by the tapper. It is
      * not an accurate count of subscribers.
@@ -76,7 +76,7 @@ interface TapSubscriber {
 /**
  * Payload from observable.
  */
-export interface TapValue<TType> {
+export interface TapPayload<TType> {
     /**
      * Counts how many values have been emitted. First item starts from 1.
      */
@@ -88,7 +88,7 @@ export interface TapValue<TType> {
     /**
      * The observable payload.
      */
-    value: TType;
+    payload: TType;
 }
 
 /**
@@ -98,5 +98,5 @@ export interface TapOperator<TIn, TOut> {
     /**
      * An operator can react to the value emitted by an observable, and then pass the value to the next operator.
      */
-    pipe(value: TapValue<TIn>, next: (value: TapValue<TOut>) => void);
+    pipe(value: TapPayload<TIn>, next: (value: TapPayload<TOut>) => void);
 }
