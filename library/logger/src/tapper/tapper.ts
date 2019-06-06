@@ -44,6 +44,13 @@ export class Tapper<TObservable, TOperator> {
     }
 
     /**
+     * Adds a unique ID code to each subscriber of the observable stream.
+     */
+    public id(): Tapper<TObservable, TOperator> {
+
+    }
+
+    /**
      * Prints info messages to the console.
      */
     public info(...args: any[]): OperatorFunction<TObservable, TObservable> {
@@ -89,7 +96,11 @@ export class Tapper<TObservable, TOperator> {
 
         return (source: Observable<TObservable>) => {
             return source.pipe(
-                scan((acc, value) => ({count: acc.count + 1, value}), {count: 0, value: null}),
+                scan((acc, value) => ({count: acc.count + 1, value, id: acc.id}), {
+                    count: 0,
+                    value: null,
+                    id: {value: '12345', show: false}
+                }),
                 tap(value => tapNext(value, 0)),
                 map(value => value.value)
             );

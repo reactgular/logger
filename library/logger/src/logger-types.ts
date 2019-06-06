@@ -63,6 +63,7 @@ export interface ConsoleMethods<TReturn> {
  */
 export interface TapValue<TType> {
     count: number;
+    id: { value: string, show: boolean };
     value: TType;
 }
 
