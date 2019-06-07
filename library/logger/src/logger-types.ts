@@ -37,16 +37,6 @@ export const LOGGER_ALL = LOGGER_LEVEL.DEBUG | LOGGER_LEVEL.ERROR | LOGGER_LEVEL
 export const LOGGER_TAILS_DEFAULT = ['Component', 'Directive', 'Service', 'Factory', 'Pipe', 'Module', 'Resolver', 'Provider'];
 
 /**
- * Configuration options for the logger. Can be provided in the root module.
- *
- * @deprecated
- */
-export interface LoggerConfig {
-    levels?: LOGGER_LEVEL;
-    tails?: string[];
-}
-
-/**
  * Defines the function type for a console method.
  */
 export type ConsoleMethod<TReturn> = (...params: any[]) => TReturn;
