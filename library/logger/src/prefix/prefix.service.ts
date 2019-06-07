@@ -4,9 +4,7 @@ import {LOGGER_CONFIG, LoggerConfig} from '../logger-types';
 /**
  * Computes the prefix string used for loggers.
  */
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable({providedIn: 'root'})
 export class PrefixService {
     /**
      * The regex used to remove tails.
