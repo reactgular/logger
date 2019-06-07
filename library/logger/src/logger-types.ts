@@ -1,9 +1,25 @@
 import {InjectionToken} from '@angular/core';
 
 /**
- * Token to inject the logger configuration.
+ * Bitwise enum for configuring log levels.
  */
-export const LOGGER_CONFIG: InjectionToken<Partial<LoggerConfig>> = new InjectionToken<Partial<LoggerConfig>>('LOGGER_CONFIG');
+export enum LOGGER_LEVEL {
+    DEBUG = 0b00000001,
+    ERROR = 0b00000010,
+    INFO = 0b00000100,
+    LOG = 0b00001000,
+    WARN = 0b00010000
+}
+
+/**
+ * Token to inject logging levels.
+ */
+export const LOGGER_LEVELS: InjectionToken<LOGGER_LEVEL> = new InjectionToken<LOGGER_LEVEL>('LOGGER_LEVELS');
+
+/**
+ * Token to inject tails that should removed from prefixes.
+ */
+export const LOGGER_TAILS: InjectionToken<string[]> = new InjectionToken<string[]>('LOGGER_TAILS');
 
 /**
  * Token to inject the browser's console.
@@ -11,15 +27,23 @@ export const LOGGER_CONFIG: InjectionToken<Partial<LoggerConfig>> = new Injectio
 export const LOGGER_CONSOLE: InjectionToken<ConsoleMethods<void>> = new InjectionToken<Console>('LOGGER_CONSOLE');
 
 /**
+ * Logs all levels
+ */
+export const LOGGER_ALL = LOGGER_LEVEL.DEBUG | LOGGER_LEVEL.ERROR | LOGGER_LEVEL.INFO | LOGGER_LEVEL.LOG | LOGGER_LEVEL.WARN;
+
+/**
+ * Defaults list of tails to remove.
+ */
+export const LOGGER_TAILS_DEFAULT = ['Component', 'Directive', 'Service', 'Factory', 'Pipe', 'Module', 'Resolver', 'Provider'];
+
+/**
  * Configuration options for the logger. Can be provided in the root module.
+ *
+ * @deprecated
  */
 export interface LoggerConfig {
-    debug: boolean;
-    error: boolean;
-    info: boolean;
-    log: boolean;
-    tails: string[];
-    warn: boolean;
+    levels?: LOGGER_LEVEL;
+    tails?: string[];
 }
 
 /**

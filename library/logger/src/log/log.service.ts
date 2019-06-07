@@ -1,6 +1,15 @@
 /* tslint:disable:no-this._console */
-import {Inject, Optional} from '@angular/core';
-import {ConsoleMethod, ConsoleMethods, ConsoleNoop, LOGGER_CONFIG, LOGGER_CONSOLE, LoggerConfig} from '../logger-types';
+import {Inject} from '@angular/core';
+import {
+    ConsoleMethod,
+    ConsoleMethods,
+    ConsoleNoop,
+    LOGGER_ALL,
+    LOGGER_CONSOLE,
+    LOGGER_LEVEL,
+    LOGGER_LEVELS,
+    LOGGER_TAILS_DEFAULT
+} from '../logger-types';
 import {PrefixService} from '../prefix/prefix.service';
 import {Tapper} from '../tapper/tapper';
 
@@ -10,12 +19,7 @@ export class LogService implements ConsoleMethods<void> {
     /**
      * Global access to a logger.
      */
-    public static Logger: LogService = new LogService({}, console, new PrefixService());
-
-    /**
-     * Configuration
-     */
-    private readonly _config: LoggerConfig;
+    public static instance: LogService = new LogService(LOGGER_ALL, console, new PrefixService(LOGGER_TAILS_DEFAULT));
 
     /**
      * Output prefix
@@ -25,38 +29,55 @@ export class LogService implements ConsoleMethods<void> {
     /**
      * Allows for optional prefix.
      */
-    public constructor(@Inject(LOGGER_CONFIG) @Optional() config: Partial<LoggerConfig>,
+    public constructor(@Inject(LOGGER_LEVELS) private _levels: LOGGER_LEVEL,
                        @Inject(LOGGER_CONSOLE) private _console: ConsoleMethods<void>,
                        private _prefixService: PrefixService) {
         this._prefixName = '';
-        this._config = Object.assign({
-            debug: true,
-            tails: [],
-            log: true,
-            error: true,
-            info: true,
-            warn: true
-        }, config || {});
     }
 
+    /**
+     * Gets the method from the console object.
+     */
     public get debug(): ConsoleMethod<void> {
-        return this._method('debug');
+        return this._levels & LOGGER_LEVEL.DEBUG
+            ? this._method('debug')
+            : ConsoleNoop;
     }
 
+    /**
+     * Gets the method from the console object.
+     */
     public get error(): ConsoleMethod<void> {
-        return this._method('error');
+        return this._levels & LOGGER_LEVEL.ERROR
+            ? this._method('error')
+            : ConsoleNoop;
     }
 
+    /**
+     * Gets the method from the console object.
+     */
     public get info(): ConsoleMethod<void> {
-        return this._method('info');
+        return this._levels & LOGGER_LEVEL.INFO
+            ? this._method('info')
+            : ConsoleNoop;
     }
 
+    /**
+     * Gets the method from the console object.
+     */
     public get log(): ConsoleMethod<void> {
-        return this._method('log');
+        return this._levels & LOGGER_LEVEL.LOG
+            ? this._method('log')
+            : ConsoleNoop;
     }
 
+    /**
+     * Gets the method from the console object.
+     */
     public get warn(): ConsoleMethod<void> {
-        return this._method('warn');
+        return this._levels & LOGGER_LEVEL.WARN
+            ? this._method('warn')
+            : ConsoleNoop;
     }
 
     /**
@@ -86,13 +107,16 @@ export class LogService implements ConsoleMethods<void> {
     /**
      * Creates a logger with an automatic prefix.
      */
-    public withPrefix(value?: string, seperator?: string): LogService {
-        return new LogService(this._config, this._console, this._prefixService)
-            .setPrefix(this._prefixName + this._prefixService.prefix(value) + (seperator === undefined ? PREFIX_SEPARATOR : seperator));
+    public withPrefix(value?: string, separator?: string): LogService {
+        return new LogService(this._levels, this._console, this._prefixService)
+            .setPrefix(this._prefixName + this._prefixService.prefix(value) + (separator === undefined ? PREFIX_SEPARATOR : separator));
     }
 
+    /**
+     * Returns the logging function from the console object.
+     */
     private _method(name: string): ConsoleMethod<void> {
-        if (!this._config[name] || !this._console || !this._console[name]) {
+        if (!this._console || !this._console[name]) {
             return ConsoleNoop;
         }
         return this._prefixName

@@ -1,5 +1,5 @@
 import {Inject, Injectable, Optional} from '@angular/core';
-import {LOGGER_CONFIG, LoggerConfig} from '../logger-types';
+import {LOGGER_TAILS} from '../logger-types';
 
 /**
  * Computes the prefix string used for loggers.
@@ -14,10 +14,8 @@ export class PrefixService {
     /**
      * Constructor
      */
-    public constructor(@Inject(LOGGER_CONFIG) @Optional() config?: LoggerConfig) {
-        const defaultTails = ['Component', 'Directive', 'Service', 'Factory', 'Pipe', 'Module', 'Resolver', 'Provider'];
-        const tails = (config && config.tails) || defaultTails;
-        this.addTails(tails);
+    public constructor(@Inject(LOGGER_TAILS) @Optional() tails: string[]) {
+        this.addTails(tails || []);
     }
 
     /**

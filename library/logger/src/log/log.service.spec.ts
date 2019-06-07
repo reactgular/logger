@@ -1,6 +1,6 @@
 import {TestBed} from '@angular/core/testing';
 import {MockConsole} from '../../tests/mock-console';
-import {LOGGER_CONFIG, LOGGER_CONSOLE} from '../logger-types';
+import {LOGGER_ALL, LOGGER_CONSOLE, LOGGER_LEVELS, LOGGER_TAILS, LOGGER_TAILS_DEFAULT} from '../logger-types';
 import {Tapper} from '../tapper/tapper';
 import {LogService} from './log.service';
 
@@ -9,7 +9,8 @@ describe(LogService.name, () => {
         TestBed.configureTestingModule({
             providers: [
                 LogService,
-                {provide: LOGGER_CONFIG, useValue: {enabled: true}},
+                {provide: LOGGER_LEVELS, useValue: LOGGER_ALL},
+                {provide: LOGGER_TAILS, useValue: LOGGER_TAILS_DEFAULT},
                 {provide: LOGGER_CONSOLE, useValue: new MockConsole()}
             ]
         });
@@ -71,10 +72,10 @@ describe(LogService.name, () => {
 
 describe(`${LogService.name}.Logger`, () => {
     it('should have instance', () => {
-        expect(LogService.Logger instanceof LogService).toBeTruthy();
+        expect(LogService.instance instanceof LogService).toBeTruthy();
     });
 
     it('should not have a prefix', () => {
-        expect(LogService.Logger.getPrefix()).toBe('');
+        expect(LogService.instance.getPrefix()).toBe('');
     });
 });

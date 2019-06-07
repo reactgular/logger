@@ -2,8 +2,8 @@ import {TestBed} from '@angular/core/testing';
 import {of} from 'rxjs';
 import {filter, first, map} from 'rxjs/operators';
 import {MockConsole} from '../../tests/mock-console';
-import {LOGGER_CONFIG, LOGGER_CONSOLE} from '../logger-types';
 import {LogService} from '../log/log.service';
+import {LOGGER_ALL, LOGGER_CONSOLE, LOGGER_LEVELS} from '../logger-types';
 import {Tapper} from './tapper';
 
 describe(Tapper.name, () => {
@@ -14,7 +14,7 @@ describe(Tapper.name, () => {
         TestBed.configureTestingModule({
             providers: [
                 LogService,
-                {provide: LOGGER_CONFIG, useValue: {enabled: true}},
+                {provide: LOGGER_LEVELS, useValue: LOGGER_ALL},
                 {provide: LOGGER_CONSOLE, useValue: new MockConsole()}
             ]
         });

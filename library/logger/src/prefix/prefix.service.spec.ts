@@ -1,14 +1,23 @@
 import {TestBed} from '@angular/core/testing';
-import {LOGGER_CONFIG} from '../logger-types';
+import {LOGGER_ALL, LOGGER_LEVELS, LOGGER_TAILS, LOGGER_TAILS_DEFAULT} from '../logger-types';
 
 import {PrefixService} from './prefix.service';
 
 describe('PrefixService', () => {
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            providers: [
+                {provide: LOGGER_TAILS, useValue: LOGGER_TAILS_DEFAULT}
+            ]
+        });
+    });
+
     it('should be configurable', () => {
         const prefix: PrefixService = TestBed
             .configureTestingModule({
                 providers: [
-                    {provide: LOGGER_CONFIG, useValue: {tails: ['House']}}
+                    {provide: LOGGER_LEVELS, useValue: LOGGER_ALL},
+                    {provide: LOGGER_TAILS, useValue: ['House']}
                 ]
             })
             .get(PrefixService);
