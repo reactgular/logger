@@ -1,7 +1,6 @@
 import {Observable, OperatorFunction, Subject, throwError} from 'rxjs';
 import {catchError, finalize, tap} from 'rxjs/operators';
 import {LoggerService} from '../logger/logger.service';
-import {LogOperator} from '../operators/log.operator';
 
 export class Tapper<TObservable> {
     /**
@@ -24,28 +23,28 @@ export class Tapper<TObservable> {
      * Prints debug messages to the console.
      */
     public debug(...args: any[]): OperatorFunction<TObservable, TObservable> {
-        return this._subscribe(new LogOperator('debug', this._logger, args));
+        return this._subscribe('debug', args);
     }
 
     /**
      * Prints error messages to the console.
      */
     public error(...args: any[]): OperatorFunction<TObservable, TObservable> {
-        return this._subscribe(new LogOperator('error', this._logger, args));
+        return this._subscribe('error', args);
     }
 
     /**
      * Prints info messages to the console.
      */
     public info(...args: any[]): OperatorFunction<TObservable, TObservable> {
-        return this._subscribe(new LogOperator('info', this._logger, args));
+        return this._subscribe('info', args);
     }
 
     /**
      * Prints log messages to the console.
      */
     public log(...args: any[]): OperatorFunction<TObservable, TObservable> {
-        return this._subscribe(new LogOperator('log', this._logger, args));
+        return this._subscribe('log', args);
     }
 
     /**
@@ -67,15 +66,23 @@ export class Tapper<TObservable> {
      * Prints warn messages to the console.
      */
     public warn(...args: any[]): OperatorFunction<TObservable, TObservable> {
-        return this._subscribe(new LogOperator('warn', this._logger, args));
+        return this._subscribe('warn', args);
     }
 
-    private _subscribe(log: LogOperator<TObservable>): OperatorFunction<TObservable, TObservable> {
+    /**
+     * Subscribes to the source observable and emits values to the tapper observable.
+     */
+    private _subscribe(method: string, args: any[]): OperatorFunction<TObservable, TObservable> {
         return (source: Observable<TObservable>) => {
+            const write = (method: string, args: any[]) => {
+                (<Function> this._logger[method]).apply(this, args);
+            };
+
             this._observable$.subscribe(
-                value => log.write(value),
-                error => log.write(error)
+                value => write(method, [...args, value]),
+                error => write(method, [...args, error])
             );
+
             return source.pipe(
                 tap(value => this._subject$.next(value)),
                 catchError(err => {

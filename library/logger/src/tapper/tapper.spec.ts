@@ -56,13 +56,23 @@ describe(Tapper.name, () => {
         ]);
     });
 
-    it('should log first value for each subscription', () => {
+    it('should log first value', () => {
         of(1, 2, 3, 4, 5).pipe(
             log.tap().pipe(first()).debug()
         ).subscribe();
 
         expect(mock.buffer).toEqual([
             {name: 'debug', args: ['$', 1]}
+        ]);
+    });
+
+    it('should log extra messages', () => {
+        of('world').pipe(
+            log.tap().debug('hello')
+        ).subscribe();
+
+        expect(mock.buffer).toEqual([
+            {name: 'debug', args: ['$', 'hello', 'world']}
         ]);
     });
 });
