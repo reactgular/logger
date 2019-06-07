@@ -3,22 +3,22 @@ import {of} from 'rxjs';
 import {filter, first, map} from 'rxjs/operators';
 import {MockConsole} from '../../tests/mock-console';
 import {LOGGER_CONFIG, LOGGER_CONSOLE} from '../logger-types';
-import {LoggerService} from '../logger/logger.service';
+import {LogService} from '../log/log.service';
 import {Tapper} from './tapper';
 
 describe(Tapper.name, () => {
     let mock: MockConsole;
-    let log: LoggerService;
+    let log: LogService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
-                LoggerService,
+                LogService,
                 {provide: LOGGER_CONFIG, useValue: {enabled: true}},
                 {provide: LOGGER_CONSOLE, useValue: new MockConsole()}
             ]
         });
-        log = TestBed.get(LoggerService);
+        log = TestBed.get(LogService);
         mock = TestBed.get(LOGGER_CONSOLE);
     });
 

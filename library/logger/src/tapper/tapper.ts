@@ -1,6 +1,6 @@
 import {Observable, OperatorFunction, Subject, throwError} from 'rxjs';
 import {catchError, finalize, tap} from 'rxjs/operators';
-import {LoggerService} from '../logger/logger.service';
+import {LogService} from '../log/log.service';
 
 export class Tapper<TObservable> {
     /**
@@ -16,7 +16,7 @@ export class Tapper<TObservable> {
     /**
      * Constructor
      */
-    public constructor(private _logger: LoggerService) {
+    public constructor(private _logger: LogService) {
     }
 
     /**
@@ -50,7 +50,7 @@ export class Tapper<TObservable> {
     /**
      * Gets the logger associated with the tapper.
      */
-    public logger(): LoggerService {
+    public logger(): LogService {
         return this._logger;
     }
 

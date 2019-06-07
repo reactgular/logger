@@ -6,11 +6,11 @@ import {Tapper} from '../tapper/tapper';
 
 const PREFIX_SEPARATOR = ':';
 
-export class LoggerService implements ConsoleMethods<void> {
+export class LogService implements ConsoleMethods<void> {
     /**
      * Global access to a logger.
      */
-    public static Logger: LoggerService = new LoggerService({}, console, new PrefixService());
+    public static Logger: LogService = new LogService({}, console, new PrefixService());
 
     /**
      * Configuration
@@ -69,7 +69,7 @@ export class LoggerService implements ConsoleMethods<void> {
     /**
      * Changes the loggers prefix.
      */
-    public setPrefix(value: string): LoggerService {
+    public setPrefix(value: string): LogService {
         this._prefixName = value;
         return this;
     }
@@ -86,8 +86,8 @@ export class LoggerService implements ConsoleMethods<void> {
     /**
      * Creates a logger with an automatic prefix.
      */
-    public withPrefix(value?: string, seperator?: string): LoggerService {
-        return new LoggerService(this._config, this._console, this._prefixService)
+    public withPrefix(value?: string, seperator?: string): LogService {
+        return new LogService(this._config, this._console, this._prefixService)
             .setPrefix(this._prefixName + this._prefixService.prefix(value) + (seperator === undefined ? PREFIX_SEPARATOR : seperator));
     }
 
