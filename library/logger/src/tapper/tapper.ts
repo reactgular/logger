@@ -1,5 +1,5 @@
-import {Observable, OperatorFunction, Subject} from 'rxjs';
-import {finalize, takeUntil, tap} from 'rxjs/operators';
+import {Observable, OperatorFunction, Subject, throwError} from 'rxjs';
+import {catchError, finalize, tap} from 'rxjs/operators';
 import {LoggerService} from '../logger/logger.service';
 import {LogOperator} from '../operators/log.operator';
 
@@ -72,15 +72,17 @@ export class Tapper<TObservable> {
 
     private _subscribe(log: LogOperator<TObservable>): OperatorFunction<TObservable, TObservable> {
         return (source: Observable<TObservable>) => {
-            const destroy$ = new Subject<void>();
-
-            this._observable$.pipe(
-                takeUntil(destroy$)
-            ).subscribe(value => log.pipe(value));
-
+            this._observable$.subscribe(
+                value => log.write(value),
+                error => log.write(error)
+            );
             return source.pipe(
                 tap(value => this._subject$.next(value)),
-                finalize(() => destroy$.next())
+                catchError(err => {
+                    this._subject$.error(err);
+                    return throwError(err);
+                }),
+                finalize(() => this._subject$.complete())
             );
         };
     }

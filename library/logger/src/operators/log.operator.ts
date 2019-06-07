@@ -16,7 +16,7 @@ export class LogOperator<TType> {
     /**
      * Pipes the value to the logger. Calls next but there likely aren't any more operators.
      */
-    public pipe(value: TType) {
+    public write(value: TType) {
         this._console[this._method](value);
     }
 }
