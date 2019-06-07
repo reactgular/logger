@@ -28,6 +28,19 @@ describe(LogService.name, () => {
 
                 expect(mock.buffer).toEqual([{name, args}]);
             });
+
+            it(`should not call console.${name} when disabled`, () => {
+                const log = TestBed.configureTestingModule({
+                    providers: [
+                        {provide: LOGGER_LEVELS, useValue: 0}
+                    ]
+                }).get(LogService);
+                const mock: MockConsole = TestBed.get(LOGGER_CONSOLE);
+
+                log[name]('hello world');
+
+                expect(mock.buffer).toEqual([]);
+            });
         });
     });
 
