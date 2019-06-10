@@ -1,8 +1,12 @@
 import {Observable, OperatorFunction, Subject, throwError} from 'rxjs';
 import {catchError, finalize, tap} from 'rxjs/operators';
-import {LogService} from '../log/log.service';
+import {LoggerMethods, TapperMethods} from '../logger-types';
 
-export class Tapper<TObservable> {
+/**
+ * Tappers are used to listen into observable streams and log the emitted values to the console. A tapper can have observable
+ * operators piped that effect only the console output.
+ */
+export class Tapper<TObservable> implements TapperMethods<TObservable> {
     /**
      * The inner subject that will emit log values.
      */
@@ -16,7 +20,7 @@ export class Tapper<TObservable> {
     /**
      * Constructor
      */
-    public constructor(private _logger: LogService) {
+    public constructor(private _logger: LoggerMethods) {
     }
 
     /**
@@ -50,14 +54,14 @@ export class Tapper<TObservable> {
     /**
      * Gets the logger associated with the tapper.
      */
-    public logger(): LogService {
+    public logger(): LoggerMethods {
         return this._logger;
     }
 
     /**
      * @todo Look at how the types for pipe() are done in rxjs.
      */
-    public pipe(...args: OperatorFunction<any, any>[]): Tapper<TObservable> {
+    public pipe(...args: OperatorFunction<any, any>[]): TapperMethods<TObservable> {
         this._observable$ = this._observable$.pipe.apply(this._observable$, args);
         return this;
     }

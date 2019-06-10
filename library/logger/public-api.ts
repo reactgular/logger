@@ -9,6 +9,7 @@ export {
     LOGGER_CONSOLE,
     LOGGER_ALL,
     LOGGER_TAILS_DEFAULT,
+    LoggerConfig,
     ConsoleMethods,
     ConsoleMethod
 }from './src/logger-types';
