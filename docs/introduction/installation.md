@@ -9,7 +9,7 @@ npm install --save @reactgular/logger
 yarn add @reactgular/logger
 ```
 
-then in `app.module.ts`, import the `NgxsModule`:
+then in `app.module.ts`, import the `LoggerModule`:
 
 ```typescript
 import {NgModule} from '@angular/core';

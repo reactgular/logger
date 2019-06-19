@@ -1,4 +1,4 @@
-# Why?
+## Why?
 
 Why another console logger for Angular? I've been copying and pasting the same log service between projects for several years. Everything else I tried
 was either too complicated or *erased* the *file name* and *line number* from the browser's console output, and I just kept reusing my trusty
