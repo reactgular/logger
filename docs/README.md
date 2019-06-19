@@ -4,8 +4,30 @@
 
 # Logger
 
-Logger is a utility library for Angular that makes logging to the browser console 
-easier and more verbose.
+Logger allows you to add `console.log()` messages to Angular applications and easily disable them in production. It helps make
+console messages easier to filter by prefixing messages with the current class name. So if you have a component named `MainComponent` you
+can filter by `Main:` to see only console messages from that component.
+
+For example;
+
+```
+@Component({...})
+export class MainComponent implements OnInit {
+   private readonly _log: LogService;
+   
+   public constructor(log: LogService) {
+      this._log = log.withPrefix(MainComponent.name);
+   }
+   
+   public ngOnInit() {
+      this._log.debug('Hello world!');
+      // ^^^ outputs "Main: Hello world!"
+   }
+}
+```
+
+This library is based on the idea of *logging often* so that when a *bug* is discovered the *context* is known without any extra effort. If
+you have to add log messages *later* to understand *why* the bug happened, then you haven't been logging *enough*.
 
 # Installation
 
