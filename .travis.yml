@@ -12,10 +12,8 @@ cache:
 before_install:
     - npm update
 install:
-    - npm install -g codecov
-    - npm install coveralls
     - npm install
+    - npm install coveralls
 script:
     - npm test
-    - codecov
-    - cat ./coverage/coverage.lcov | ./node_modules/coveralls/bin/coveralls.js
+    - cat ./coverage/logger/lcov.info | ./node_modules/coveralls/bin/coveralls.js
