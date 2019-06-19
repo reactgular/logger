@@ -1,8 +1,8 @@
 import {Observable, OperatorFunction} from 'rxjs';
 import {MockConsole} from '../../tests/mock-console';
 import {LogNoopService} from '../log-noop/log-noop.service';
-import {LoggerMethods} from '../logger-types';
 import {TapperNoop} from './tapper-noop';
+import {LogService} from '../log/log.service';
 
 describe(TapperNoop.name, () => {
     it('should have console methods', () => {
@@ -21,7 +21,7 @@ describe(TapperNoop.name, () => {
     });
 
     it('should return the logger', () => {
-        const logger: LoggerMethods = new LogNoopService();
+        const logger: LogService = new LogNoopService();
         const tapper = new TapperNoop(logger);
         expect(logger).toBe(tapper.logger());
     });

@@ -1,6 +1,7 @@
 import {Observable, OperatorFunction, Subject, throwError} from 'rxjs';
 import {catchError, finalize, tap} from 'rxjs/operators';
-import {LoggerMethods, TapperMethods} from '../logger-types';
+import {TapperMethods} from '../logger-types';
+import {LogService} from '../log/log.service';
 
 /**
  * Tappers are used to listen into observable streams and log the emitted values to the console. A tapper can have observable
@@ -20,7 +21,7 @@ export class Tapper<TObservable> implements TapperMethods<TObservable> {
     /**
      * Constructor
      */
-    public constructor(private _logger: LoggerMethods) {
+    public constructor(private _log: LogService) {
     }
 
     /**
@@ -54,8 +55,8 @@ export class Tapper<TObservable> implements TapperMethods<TObservable> {
     /**
      * Gets the logger associated with the tapper.
      */
-    public logger(): LoggerMethods {
-        return this._logger;
+    public logger(): LogService {
+        return this._log;
     }
 
     /**
@@ -79,7 +80,7 @@ export class Tapper<TObservable> implements TapperMethods<TObservable> {
     private _subscribe(method: string, args: any[]): OperatorFunction<TObservable, TObservable> {
         return (source: Observable<TObservable>) => {
             const write = (method: string, args: any[]) => {
-                (<Function> this._logger[method]).apply(this, args);
+                (<Function>this._log[method]).apply(this, args);
             };
 
             this._observable$.subscribe(

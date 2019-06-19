@@ -1,127 +1,52 @@
-import {Inject} from '@angular/core';
-import {
-    ConsoleMethod,
-    ConsoleMethods,
-    ConsoleNoop,
-    LOGGER_ALL,
-    LOGGER_CONSOLE,
-    LOGGER_LEVEL,
-    LOGGER_LEVELS,
-    LOGGER_TAILS_DEFAULT,
-    LoggerMethods,
-    TapperMethods
-} from '../logger-types';
-import {PrefixService} from '../prefix/prefix.service';
-import {Tapper} from '../tapper/tapper';
+import {ConsoleMethod, TapperMethods} from '../logger-types';
 
-const PREFIX_SEPARATOR = ':';
-
-export class LogService implements LoggerMethods {
+/**
+ * Defines a base class which can double as an injection token in Angular. This allows the module to
+ * replace the service with a different class without requiring users to use a @Inject() decorator.
+ */
+export abstract class LogService {
     /**
-     * Global access to a logger.
+     * Debug method
      */
-    public static instance: LogService = new LogService(LOGGER_ALL, console, new PrefixService(LOGGER_TAILS_DEFAULT));
+    public abstract get debug(): ConsoleMethod<void>;
 
     /**
-     * Output prefix
+     * Error method
      */
-    private _prefixName: string;
+    public abstract get error(): ConsoleMethod<void>;
 
     /**
-     * Allows for optional prefix.
+     * Info method
      */
-    public constructor(@Inject(LOGGER_LEVELS) private _levels: LOGGER_LEVEL,
-                       @Inject(LOGGER_CONSOLE) private _console: ConsoleMethods<void>,
-                       private _prefixService: PrefixService) {
-        this._prefixName = '';
-    }
+    public abstract get info(): ConsoleMethod<void>;
 
     /**
-     * Gets the method from the console object.
+     * Log method
      */
-    public get debug(): ConsoleMethod<void> {
-        return this._levels & LOGGER_LEVEL.DEBUG
-            ? this._method('debug')
-            : ConsoleNoop;
-    }
+    public abstract get log(): ConsoleMethod<void>;
 
     /**
-     * Gets the method from the console object.
+     * Warn method
      */
-    public get error(): ConsoleMethod<void> {
-        return this._levels & LOGGER_LEVEL.ERROR
-            ? this._method('error')
-            : ConsoleNoop;
-    }
+    public abstract get warn(): ConsoleMethod<void>;
 
     /**
-     * Gets the method from the console object.
+     * Gets the prefix for the logger
      */
-    public get info(): ConsoleMethod<void> {
-        return this._levels & LOGGER_LEVEL.INFO
-            ? this._method('info')
-            : ConsoleNoop;
-    }
+    public abstract getPrefix();
 
     /**
-     * Gets the method from the console object.
+     * Sets a new prefix for the logger.
      */
-    public get log(): ConsoleMethod<void> {
-        return this._levels & LOGGER_LEVEL.LOG
-            ? this._method('log')
-            : ConsoleNoop;
-    }
+    public abstract setPrefix(value: string);
 
     /**
-     * Gets the method from the console object.
+     * Creates an observable tapper
      */
-    public get warn(): ConsoleMethod<void> {
-        return this._levels & LOGGER_LEVEL.WARN
-            ? this._method('warn')
-            : ConsoleNoop;
-    }
+    public abstract tap<TObservable>(): TapperMethods<TObservable>;
 
     /**
-     * Gets the current prefix.
+     * Creates a new logger and appends the prefix.
      */
-    public getPrefix(): string {
-        return this._prefixName;
-    }
-
-    /**
-     * Changes the loggers prefix.
-     */
-    public setPrefix(value: string): LoggerMethods {
-        this._prefixName = value;
-        return this;
-    }
-
-    /**
-     * Creates a tapper object that can log output from an observable.
-     */
-    public tap<TObservable>(): TapperMethods<TObservable> {
-        const log = this.withPrefix('$', '');
-        log.setPrefix(log.getPrefix().replace(/(:\$)$/, '$'));
-        return new Tapper<TObservable>(log);
-    }
-
-    /**
-     * Creates a logger with an automatic prefix.
-     */
-    public withPrefix(value?: string, separator?: string): LoggerMethods {
-        return new LogService(this._levels, this._console, this._prefixService)
-            .setPrefix(this._prefixName + this._prefixService.prefix(value) + (separator === undefined ? PREFIX_SEPARATOR : separator));
-    }
-
-    /**
-     * Returns the logging function from the console object.
-     */
-    private _method(name: string): ConsoleMethod<void> {
-        if (!this._console || !this._console[name]) {
-            return ConsoleNoop;
-        }
-        return this._prefixName
-            ? this._console[name].bind(this._console, this._prefixName)
-            : this._console[name].bind(this._console);
-    }
+    public abstract withPrefix(value?: string, separator?: string): LogService;
 }

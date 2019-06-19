@@ -1,5 +1,6 @@
 import {Observable, OperatorFunction} from 'rxjs';
-import {LoggerMethods, TapperMethods} from '../logger-types';
+import {TapperMethods} from '../logger-types';
+import {LogService} from '../log/log.service';
 
 /**
  * A do nothing observable operator.
@@ -13,7 +14,7 @@ export class TapperNoop<TObservable> implements TapperMethods<TObservable> {
     /**
      * Constructor
      */
-    public constructor(private readonly _logger: LoggerMethods) {
+    public constructor(private readonly _logger: LogService) {
 
     }
 
@@ -48,14 +49,14 @@ export class TapperNoop<TObservable> implements TapperMethods<TObservable> {
     /**
      * Gets the logger associated with this tapper.
      */
-    public logger(): LoggerMethods {
+    public logger(): LogService {
         return this._logger;
     }
 
     /**
      * Does nothing
      */
-    public pipe(...args: OperatorFunction<any, any>[]): TapperNoop<TObservable> {
+    public pipe(...args: OperatorFunction<any, any>[]): TapperMethods<TObservable> {
         return this;
     }
 

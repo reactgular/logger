@@ -1,6 +1,6 @@
 import {TestBed} from '@angular/core/testing';
 import {MockConsole} from '../../tests/mock-console';
-import {LOGGER_ALL, LOGGER_CONSOLE, LOGGER_LEVELS, LOGGER_TAILS, LOGGER_TAILS_DEFAULT, LoggerMethods} from '../logger-types';
+import {LOGGER_ALL, LOGGER_CONSOLE, LOGGER_LEVELS, LOGGER_TAILS, LOGGER_TAILS_DEFAULT} from '../logger-types';
 import {Tapper} from '../tapper/tapper';
 import {LogService} from './log.service';
 
@@ -53,7 +53,7 @@ describe(LogService.name, () => {
         });
 
         it('should create a new logger with prefix', () => {
-            let log: LoggerMethods = TestBed.get(LogService);
+            let log: LogService = TestBed.get(LogService);
             expect(log.getPrefix()).toBe('');
             log = log.withPrefix('AppComponent');
             expect(log.getPrefix()).toBe('App:');
@@ -62,7 +62,7 @@ describe(LogService.name, () => {
         });
 
         it('should use a separator', () => {
-            let log: LoggerMethods = TestBed.get(LogService);
+            let log: LogService = TestBed.get(LogService);
             log = log.withPrefix('AppComponent', '@');
             expect(log.getPrefix()).toBe('App@');
         });

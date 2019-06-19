@@ -1,5 +1,5 @@
 import {MockConsole} from '../../tests/mock-console';
-import {ConsoleNoop, LoggerMethods} from '../logger-types';
+import {ConsoleNoop} from '../logger-types';
 import {TapperNoop} from '../tapper-noop/tapper-noop';
 import {LogNoopService} from './log-noop.service';
 
@@ -7,7 +7,7 @@ describe(LogNoopService.name, () => {
     describe('console', () => {
         MockConsole.METHODS.forEach(name => {
             it(`should provide noop for console.${name}() method`, () => {
-                const log: LoggerMethods = new LogNoopService();
+                const log: LogNoopService = new LogNoopService();
                 expect(typeof log[name]).toBe('function');
                 expect(log[name]).toBe(ConsoleNoop);
             });

@@ -1,5 +1,6 @@
 import {InjectionToken} from '@angular/core';
 import {OperatorFunction} from 'rxjs';
+import {LogService} from './log/log.service';
 
 /**
  * Bitwise enum for configuring log levels.
@@ -96,31 +97,6 @@ export interface LoggerConfig {
 }
 
 /**
- * Defines the methods for a logger service.
- */
-export interface LoggerMethods extends ConsoleMethods<void> {
-    /**
-     * Gets the current prefix.
-     */
-    getPrefix(): string;
-
-    /**
-     * Changes the loggers prefix.
-     */
-    setPrefix(value: string): LoggerMethods;
-
-    /**
-     * Creates a tapper object that can log output from an observable.
-     */
-    tap<TObservable>(): TapperMethods<TObservable>;
-
-    /**
-     * Creates a logger with an automatic prefix.
-     */
-    withPrefix(value?: string, separator?: string): LoggerMethods;
-}
-
-/**
  * Defines the methods for the tapper of an observable.
  */
 export interface TapperMethods<TObservable> {
@@ -147,7 +123,7 @@ export interface TapperMethods<TObservable> {
     /**
      * Gets the logger associated with the tapper.
      */
-    logger(): LoggerMethods;
+    logger(): LogService;
 
     /**
      * Adds observable operators to the inner observable that is tapping into the outer observables. Operators added to the

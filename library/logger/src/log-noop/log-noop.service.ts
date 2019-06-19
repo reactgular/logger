@@ -1,12 +1,13 @@
 import {Injectable} from '@angular/core';
-import {ConsoleMethod, ConsoleNoop, LoggerMethods, TapperMethods} from '../logger-types';
+import {ConsoleMethod, ConsoleNoop, TapperMethods} from '../logger-types';
 import {TapperNoop} from '../tapper-noop/tapper-noop';
+import {LogService} from '../log/log.service';
 
 /**
  * Implements a no operation logger the effectively disables all console output.
  */
 @Injectable()
-export class LogNoopService implements LoggerMethods {
+export class LogNoopService extends LogService {
     /**
      * The noop tapper
      */
@@ -16,6 +17,7 @@ export class LogNoopService implements LoggerMethods {
      * Constructor
      */
     public constructor() {
+        super();
         this._tapper = new TapperNoop(this);
     }
 
@@ -64,7 +66,7 @@ export class LogNoopService implements LoggerMethods {
     /**
      * Does nothing
      */
-    public setPrefix(value: string): LoggerMethods {
+    public setPrefix(value: string): LogService {
         return this;
     }
 
@@ -78,7 +80,7 @@ export class LogNoopService implements LoggerMethods {
     /**
      * Does nothing
      */
-    public withPrefix(value?: string, separator?: string): LoggerMethods {
+    public withPrefix(value?: string, separator?: string): LogService {
         return this;
     }
 }

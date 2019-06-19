@@ -3,6 +3,7 @@ import {NgModule, Provider} from '@angular/core';
 import {LogNoopService} from './log-noop/log-noop.service';
 import {LogService} from './log/log.service';
 import {LOGGER_ALL, LOGGER_CONSOLE, LOGGER_LEVELS, LOGGER_TAILS, LOGGER_TAILS_DEFAULT, LoggerConfig} from './logger-types';
+import {LogConsoleService} from './log-console/log-console.service';
 
 @NgModule({})
 export class LoggerModule {
@@ -26,7 +27,7 @@ export class LoggerModule {
         ];
 
         if (options && options.enabled) {
-            providers.push({provide: LogService, useClass: LogService});
+            providers.push({provide: LogService, useClass: LogConsoleService});
         } else {
             providers.push({provide: LogService, useClass: LogNoopService});
         }
