@@ -5,6 +5,8 @@ import {LogService} from '../log/log.service';
 
 /**
  * Implements a no operation logger the effectively disables all console output.
+ *
+ * @hidden
  */
 @Injectable()
 export class LogNoopService extends LogService {

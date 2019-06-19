@@ -9,6 +9,8 @@ const NOOP_OPERATOR = (source: Observable<any>) => source;
 
 /**
  * Implements a no operation tapper the effectively disables all console output from an observable.
+ *
+ * @hidden
  */
 export class TapperNoop<TObservable> implements TapperMethods<TObservable> {
     /**

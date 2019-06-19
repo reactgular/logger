@@ -6,6 +6,9 @@ import {LogService} from '../log/log.service';
 
 const PREFIX_SEPARATOR = ':';
 
+/**
+ * @hidden
+ */
 export class LogConsoleService extends LogService {
     /**
      * Output prefix

@@ -3,6 +3,8 @@ import {LOGGER_TAILS} from '../logger-types';
 
 /**
  * Computes the prefix string used for loggers.
+ *
+ * @hidden
  */
 @Injectable({providedIn: 'root'})
 export class PrefixService {

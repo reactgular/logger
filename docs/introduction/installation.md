@@ -23,7 +23,7 @@ import {LoggerModule} from '@reactgular/logger';
 export class AppModule {}
 ```
 
-When you include the module in the import, you can pass a configuration [options](../advanced/options.md).
+When you include the module in the import, you can pass a configuration object of type [LoggerConfig](../usage/logger-config.md).
 If you are lazy loading, you can just use the `LoggerModule` module.
 
 Options such as `enabled` can be passed to the module as the second argument in the `forRoot` method. When `enabled` is
