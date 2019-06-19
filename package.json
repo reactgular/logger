@@ -1,6 +1,6 @@
 {
   "name": "@reactgular/logger",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Console logging utility for Angular project.",
   "author": "reactgular.com",
   "homepage": "https://reactgular.com/",
@@ -16,7 +16,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "test": "ng test",
+    "test": "ng test --watch=false --code-coverage",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "postbuild": "cp README.md ./dist/README.md"
