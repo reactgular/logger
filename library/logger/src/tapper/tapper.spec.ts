@@ -5,6 +5,7 @@ import {MockConsole} from '../../tests/mock-console';
 import {LogService} from '../log/log.service';
 import {LOGGER_ALL, LOGGER_CONSOLE, LOGGER_LEVELS} from '../logger-types';
 import {Tapper} from './tapper';
+import {LogConsoleService} from '../log-console/log-console.service';
 
 describe(Tapper.name, () => {
     let mock: MockConsole;
@@ -13,7 +14,7 @@ describe(Tapper.name, () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
-                LogService,
+                {provide: LogService, useClass: LogConsoleService},
                 {provide: LOGGER_LEVELS, useValue: LOGGER_ALL},
                 {provide: LOGGER_CONSOLE, useValue: new MockConsole()}
             ]
