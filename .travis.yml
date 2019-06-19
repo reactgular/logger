@@ -14,11 +14,20 @@ cache:
     directories:
         - node_modules
 
+# Set DISPLAY for Xvfb
+env:
+    - DISPLAY=:99.0
+
+# Use APT Addon to install Chrome
 addons:
-    chrome: stable
+    apt:
+        sources:
+            - google-chrome
+        packages:
+            - google-chrome-stable
 
 before_install:
-    - npm update
+    - sh -e /etc/init.d/xvfb start
 
 install:
     - npm install
