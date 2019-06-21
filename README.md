@@ -40,27 +40,27 @@ export class MainComponent implements OnInit {
 
 ## Table Of Contents
 
-- [What is Logger?](#what-is-logger-)
+- [What is Logger?](#what-is-logger)
 - [Table Of Contents](#table-of-contents)
-- [Why another console logger for Angular?](#why-another-console-logger-for-angular-)
+- [Why another console logger for Angular?](#why-another-console-logger-for-angular)
   * [Simple](#simple)
 - [Installation](#installation)
 - [LoggerConfig](#loggerconfig)
 - [LogService](#logservice)
 - [LogService Prefixes](#logservice-prefixes)
 - [LogService Methods](#logservice-methods)
-  * [LogService.debug()](#logservicedebug--)
-  * [LogService.error()](#logserviceerror--)
-  * [LogService.info()](#logserviceinfo--)
-  * [LogService.warn()](#logservicewarn--)
-  * [LogService.getPrefix()](#logservicegetprefix--)
-  * [LogService.setPrefix()](#logservicesetprefix--)
-  * [LogService.tap()](#logservicetap--)
-  * [LogService.withPrefix()](#logservicewithprefix--)
+  * [LogService.debug()](#logservicedebug)
+  * [LogService.error()](#logserviceerror)
+  * [LogService.info()](#logserviceinfo)
+  * [LogService.warn()](#logservicewarn)
+  * [LogService.getPrefix()](#logservicegetprefix)
+  * [LogService.setPrefix()](#logservicesetprefix)
+  * [LogService.tap()](#logservicetap)
+  * [LogService.withPrefix()](#logservicewithprefix)
 - [TapperMethods](#tappermethods)
-  * [TapperMethods.debug/error/info/log/warn()](#tappermethodsdebug-error-info-log-warn--)
-  * [TapperMethods.pipe()](#tappermethodspipe--)
-  * [TapperMethods.logger()](#tappermethodslogger--)
+  * [TapperMethods.debug/error/info/log/warn()](#tappermethodsdebugerrorinfologwarn)
+  * [TapperMethods.pipe()](#tappermethodspipe)
+  * [TapperMethods.logger()](#tappermethodslogger)
 
 ## Why another console logger for Angular? 
 
@@ -252,9 +252,9 @@ Creates a new `LogService` object with the given prefix.
 
 ## TapperMethods
 
-The `TapperMethods` object subscribes to an outer observable, and creates a new inner observable that will only emit values to the
-browser's console. You can apply observable operators to this inner observable via the [pipe()](#tappermethodspipe) and they will
-have no side effects on the outer observable.
+Create a `TapperMethods` object by calling `LogService.tap()` inside the `pipe()` of an observable. A tapper subscribes to an outer observable, 
+and creates a new inner observable that will only emit values to the browser's console. You can apply observable operators to this inner observable 
+via the [pipe()](#tappermethodspipe) and they will have no side effects on the outer observable.
 
 For example, you can filter values:
 
