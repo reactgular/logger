@@ -1,6 +1,6 @@
 {
   "name": "@reactgular/logger",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Console logging utility for Angular project.",
   "author": "reactgular.com",
   "homepage": "https://reactgular.com/",
@@ -14,7 +14,6 @@
   },
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
     "build": "ng build",
     "test": "ng test --watch=false --code-coverage=true",
     "lint": "ng lint",
@@ -56,7 +55,7 @@
     "ng-packagr": "^5.2.0",
     "protractor": "~5.4.0",
     "ts-node": "~7.0.0",
-    "tsickle": ">=0.34.0",
+    "tsickle": "^0.34.0",
     "tslib": "^1.9.0",
     "tslint": "~5.11.0",
     "typescript": "~3.4.5"
