@@ -10,7 +10,7 @@
       "prefix": "rg",
       "schematics": {
         "@schematics/angular:component": {
-          "styleext": "scss",
+          "style": "scss",
           "changeDetection": "OnPush",
           "flat": false
         },
@@ -31,7 +31,12 @@
             "tsConfig": "projects/tsconfig.lib.json",
             "project": "projects/ng-package.json"
           }
-        },
+        ,          "configurations": {
+            "production": {
+              "tsConfig": "projects/logger/tsconfig.lib.prod.json"
+            }
+          }
+},
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
