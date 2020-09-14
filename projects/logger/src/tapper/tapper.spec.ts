@@ -19,8 +19,8 @@ describe(Tapper.name, () => {
                 {provide: LOGGER_CONSOLE, useValue: new MockConsole()}
             ]
         });
-        log = TestBed.get(LogService);
-        mock = TestBed.get(LOGGER_CONSOLE);
+        log = TestBed.inject(LogService);
+        mock = TestBed.inject<MockConsole>(LOGGER_CONSOLE);
     });
 
     it('should have console methods', () => {

@@ -1,10 +1,9 @@
 import {TestBed} from '@angular/core/testing';
-
-import {LogConsoleService} from './log-console.service';
+import {MockConsole} from '../../tests/mock-console';
 import {LogService} from '../log/log.service';
 import {LOGGER_ALL, LOGGER_CONSOLE, LOGGER_LEVELS, LOGGER_TAILS, LOGGER_TAILS_DEFAULT} from '../logger-types';
-import {MockConsole} from '../../tests/mock-console';
 import {Tapper} from '../tapper/tapper';
+import {LogConsoleService} from './log-console.service';
 
 describe(LogConsoleService.name, () => {
     beforeEach(() => {
@@ -21,8 +20,8 @@ describe(LogConsoleService.name, () => {
     describe('console', () => {
         MockConsole.METHODS.forEach(name => {
             it(`should call console.${name}() method`, () => {
-                const mock: MockConsole = TestBed.get(LOGGER_CONSOLE);
-                const log: LogService = TestBed.get(LogService);
+                const mock: MockConsole = TestBed.inject<MockConsole>(LOGGER_CONSOLE);
+                const log: LogService = TestBed.inject(LogService);
                 const args = ['hello world'];
 
                 expect(typeof log[name]).toBe('function');
@@ -37,7 +36,7 @@ describe(LogConsoleService.name, () => {
                         {provide: LOGGER_LEVELS, useValue: 0}
                     ]
                 }).get(LogService);
-                const mock: MockConsole = TestBed.get(LOGGER_CONSOLE);
+                const mock: MockConsole = TestBed.inject<MockConsole>(LOGGER_CONSOLE);
 
                 log[name]('hello world');
 
@@ -48,14 +47,14 @@ describe(LogConsoleService.name, () => {
 
     describe('logger', () => {
         it('should set/get the prefix', () => {
-            const log: LogService = TestBed.get(LogService);
+            const log: LogService = TestBed.inject(LogService);
             expect(log.getPrefix()).toBe('');
             log.setPrefix('Example');
             expect(log.getPrefix()).toBe('Example');
         });
 
         it('should create a new logger with prefix', () => {
-            let log: LogService = TestBed.get(LogService);
+            let log: LogService = TestBed.inject(LogService);
             expect(log.getPrefix()).toBe('');
             log = log.withPrefix('AppComponent');
             expect(log.getPrefix()).toBe('App:');
@@ -64,7 +63,7 @@ describe(LogConsoleService.name, () => {
         });
 
         it('should use a separator', () => {
-            let log: LogService = TestBed.get(LogService);
+            let log: LogService = TestBed.inject(LogService);
             log = log.withPrefix('AppComponent', '@');
             expect(log.getPrefix()).toBe('App@');
         });
@@ -72,13 +71,13 @@ describe(LogConsoleService.name, () => {
 
     describe('tapping', () => {
         it('should create a tapper', () => {
-            const log: LogService = TestBed.get(LogService);
+            const log: LogService = TestBed.inject(LogService);
             const tapper = log.tap();
             expect(tapper instanceof Tapper).toBeTruthy();
         });
 
         it('prefix should end with $', () => {
-            const log: LogService = TestBed.get(LogService);
+            const log: LogService = TestBed.inject(LogService);
             const prefix = log.withPrefix('App').withPrefix('Widget').tap().logger().getPrefix();
             expect(prefix).toBe('App:Widget$');
         });

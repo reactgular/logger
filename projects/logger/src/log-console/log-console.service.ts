@@ -1,4 +1,4 @@
-import {Inject} from '@angular/core';
+import {Inject, Injectable} from '@angular/core';
 import {ConsoleMethod, ConsoleMethods, ConsoleNoop, LOGGER_CONSOLE, LOGGER_LEVEL, LOGGER_LEVELS, TapperMethods} from '../logger-types';
 import {PrefixService} from '../prefix/prefix.service';
 import {Tapper} from '../tapper/tapper';
@@ -9,6 +9,7 @@ const PREFIX_SEPARATOR = ':';
 /**
  * @hidden
  */
+@Injectable()
 export class LogConsoleService extends LogService {
     /**
      * Output prefix

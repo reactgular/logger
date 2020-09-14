@@ -1,10 +1,10 @@
-[![Build Status](https://travis-ci.org/reactgular/logger.svg?branch=master)](https://travis-ci.org/reactgular/logger)
-[![Coverage Status](https://coveralls.io/repos/github/reactgular/logger/badge.svg?branch=master)](https://coveralls.io/github/reactgular/logger?branch=master)
+[![Build Status](https://travis-ci.org/reactgular/logger.svg?branch=develop)](https://travis-ci.org/reactgular/logger)
+[![Coverage Status](https://coveralls.io/repos/github/reactgular/logger/badge.svg?branch=develop)](https://coveralls.io/github/reactgular/logger?branch=develop)
 [![npm version](https://badge.fury.io/js/%40reactgular%2Flogger.svg)](https://badge.fury.io/js/%40reactgular%2Flogger)
 
 ## What is Logger?
 
-Logger is a small Angular service that writes output to the browser's console. It helps make
+Logger is a small Angular service for writing output to the browser's console. It helps make
 console messages easier to filter by prefixing messages with the current class name. So if you have a component named `MainComponent` you
 can filter by `Main:` and see only console messages from that component. It also supports tapping *observables* so you can see how
 data is flowing through your application.
@@ -99,7 +99,7 @@ updated if you rename the class using an IDE that automatically updates all usag
 To get started, install the package from npm. The latest version (1.x) supports Angular 8.
 
 ```bash
-npm install --save @reactgular/logger
+npm install @reactgular/logger
 
 # or if you are using yarn
 yarn add @reactgular/logger

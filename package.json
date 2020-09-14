@@ -14,7 +14,7 @@
   },
   "scripts": {
     "ng": "ng",
-    "build": "ng build",
+    "build": "ng build --prod",
     "beta": "npm run test && npm run lint && npm run build && cd dist/reactgular/logger && npm publish --tag beta",
     "test": "ng test --watch=false --code-coverage=true",
     "lint": "ng lint",
@@ -29,7 +29,6 @@
     "@angular/platform-browser": "~10.1.1",
     "@angular/platform-browser-dynamic": "~10.1.1",
     "@angular/router": "~10.1.1",
-    "core-js": "^2.5.4",
     "rxjs": "~6.6.3",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"
@@ -43,7 +42,7 @@
     "@types/node": "^12.11.1",
     "@types/jasmine": "~3.3.8",
     "@types/jasminewd2": "~2.0.3",
-    "codelyzer": "^5.1.2",
+    "codelyzer": "^6.0.0",
     "jasmine-core": "~3.5.0",
     "jasmine-spec-reporter": "~5.0.0",
     "karma": "~5.0.0",
