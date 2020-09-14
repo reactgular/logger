@@ -20,10 +20,10 @@
     ],
     "paths": {
       "@reactgular/logger": [
-        "dist/logger"
+        "dist/reactgular/logger"
       ],
       "@reactgular/logger/*": [
-        "dist/logger/*"
+        "dist/reactgular/logger/*"
       ]
     }
   }

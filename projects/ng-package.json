@@ -1,6 +1,6 @@
 {
   "$schema": "../node_modules/ng-packagr/ng-package.schema.json",
-  "dest": "../dist",
+  "dest": "../dist/reactgular/logger",
   "lib": {
     "entryFile": "logger/public-api.ts",
     "umdModuleIds": {
