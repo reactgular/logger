@@ -20,23 +20,23 @@ describe('PrefixService', () => {
                     {provide: LOGGER_TAILS, useValue: ['House']}
                 ]
             })
-            .get(PrefixService);
+            .inject(PrefixService);
         expect(prefix.tails).toEqual(['House']);
         expect(prefix.prefix('WhiteHouse')).toBe('White');
     });
 
     it('should compute a prefix', () => {
-        const prefix: PrefixService = TestBed.get(PrefixService);
+        const prefix: PrefixService = TestBed.inject(PrefixService);
         expect(prefix.prefix('AppComponent')).toBe('App');
     });
 
     it('should have default tails', () => {
-        const prefix: PrefixService = TestBed.get(PrefixService);
+        const prefix: PrefixService = TestBed.inject(PrefixService);
         expect(prefix.tails).toEqual(['Component', 'Directive', 'Service', 'Factory', 'Pipe', 'Module', 'Resolver', 'Provider']);
     });
 
     it('should add tails to be removed', () => {
-        const prefix: PrefixService = TestBed.get(PrefixService);
+        const prefix: PrefixService = TestBed.inject(PrefixService);
         prefix.addTails(['Mouse', 'Space']);
         expect(prefix.tails).toEqual([
             'Component', 'Directive', 'Service', 'Factory', 'Pipe', 'Module', 'Resolver', 'Provider', 'Mouse', 'Space'

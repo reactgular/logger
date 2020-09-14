@@ -35,7 +35,7 @@ describe(LogConsoleService.name, () => {
                     providers: [
                         {provide: LOGGER_LEVELS, useValue: 0}
                     ]
-                }).get(LogService);
+                }).inject(LogService);
                 const mock: MockConsole = TestBed.inject<MockConsole>(LOGGER_CONSOLE);
 
                 log[name]('hello world');
