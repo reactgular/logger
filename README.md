@@ -6,8 +6,7 @@
 
 Logger is a small Angular service for writing output to the browser's console. It helps make
 console messages easier to filter by prefixing messages with the current class name. So if you have a component named `MainComponent` you
-can filter by `Main:` and see only console messages from that component. It also supports tapping *observables* so you can see how
-data is flowing through your application.
+can filter by `Main:` and see only console messages from that component.
 
 > Logger extends console so messages continue to display the current *filename* and *line number*.
 
@@ -27,13 +26,6 @@ export class MainComponent implements OnInit {
    public ngOnInit() {
       this._log.debug('Hello world!');
       // ^^^ outputs "Main: Hello world!"
-      
-      this._subject.pipe(
-         this._log.tap().debug('Hello world!')
-      ).subscribe();
-      
-      this._subject.next("Everyone!");
-      // ^^^ outputs "Main$ Hello world! Everyone!"
    }
 }
 ```
@@ -55,18 +47,13 @@ export class MainComponent implements OnInit {
   * [LogService.warn()](#logservicewarn)
   * [LogService.getPrefix()](#logservicegetprefix)
   * [LogService.setPrefix()](#logservicesetprefix)
-  * [LogService.tap()](#logservicetap)
   * [LogService.withPrefix()](#logservicewithprefix)
-- [TapperMethods](#tappermethods)
-  * [TapperMethods.debug/error/info/log/warn()](#tappermethodsdebugerrorinfologwarn)
-  * [TapperMethods.pipe()](#tappermethodspipe)
-  * [TapperMethods.logger()](#tappermethodslogger)
 
 ## Why another console logger for Angular? 
 
 I've been copying and pasting the same log service between projects for several years. Everything else I tried
 was either too complicated or *erased* the *file name* and *line number* from the browser's console output, and I just kept reusing my trusty
-logger code. I decided it was time to make it an official library that could be easily installed and reused.
+logger code. I decided it was time to make it a library that could be easily installed and reused.
 
 ### Simple
 
@@ -91,7 +78,7 @@ export class MainComponent {
 }
 ```
 
-The prefix value can be anything that you want, but using `MainComponent.name` means that the value is 
+The prefix value can be anything that you want, but using `MainComponent.name` means that the value will be 
 updated if you rename the class using an IDE that automatically updates all usages.
 
 ## Installation
@@ -100,9 +87,6 @@ To get started, install the package from npm.
 
 ```bash
 npm install @reactgular/logger
-
-# or if you are using yarn
-yarn add @reactgular/logger
 ```
 
 then in `app.module.ts`, import the `LoggerModule`:
@@ -125,7 +109,7 @@ If you are lazy loading, you can just use the `LoggerModule` module.
 Options such as `enabled` can be passed to the module as the second argument in the `forRoot` method. When `enabled` is
 set to *false* the log service gets replaced with a tiny *proxy* service and outputs nothing.
 
-It's important that you add `LoggerModule.forRoot()` at the root of your modules.
+It's important for you add `LoggerModule.forRoot()` at the root of your modules.
 
 ## LoggerConfig
 
@@ -158,7 +142,7 @@ constructor(log: LogService) {
 
 ## LogService Prefixes
 
-When you're using the `LogService` with Angular classes like components, services, pipes and etc. The name of those classes can be used to set the
+When you're using the `LogService` with Angular classes like components, services, pipes, etc. The name of those classes can be used to set the
 prefix string for each log message to the console. Using a prefix value of `"MainComponent"` can create *wide* console messages. So this function
 creates a new `LogService` object with a *trimmed* prefix where the *tail* strings have been removed.
 
@@ -176,8 +160,8 @@ export class MainComponent {
 }
 ```
 
-When *tail* strings are removed is configured in the `LoggerConfig` you used when calling `LoggerModule.forRoot()`. If you don't define an
-array of strings for `tails: string[]` then these default values are used.
+When you set the `tails` option in the `LoggerConfig` it replaces all the tails that are removed from prefixes. If you don't define an
+array of strings to `fails` then these default values will be used.
 
 ```typescript
 /**
@@ -194,7 +178,6 @@ import {LoggerModule, LOGGER_TRAILS_DEFAULT} from '@reactgular/logger';
 @NgModule({
   imports: [
     LoggerModule.forRoot({
-      enabled: !environment.production,
       tails: [...LOGGER_TAILS_DEFAULT, 'FooBar', 'Magic', 'Proxy']
     })
   ]
@@ -241,10 +224,6 @@ Returns the prefix string used by the `LogService` object.
 
 Sets a new prefix for the logger. This will change the *internal* prefix value used by the `LogService`. This function does not have the same
 effect as `withPrefix()` which returns a new `LogService` object with a trail strings removed for the prefix.
-
-### LogService.tap()
-
-Creates an observable tapper that can listen for emitted values and output them to the browser's console. See [TapperMethods](#tappermethods) for more information.
 
 ### LogService.withPrefix()
 
