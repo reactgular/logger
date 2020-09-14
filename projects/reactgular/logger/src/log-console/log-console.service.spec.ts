@@ -1,8 +1,7 @@
 import {TestBed} from '@angular/core/testing';
 import {MockConsole} from '../../test/mock-console';
 import {LogService} from '../log/log.service';
-import {LOGGER_ALL, LOGGER_CONSOLE, LOGGER_LEVELS, LOGGER_TAILS, LOGGER_TAILS_DEFAULT} from '../logger-types';
-import {Tapper} from '../tapper/tapper';
+import {ConsoleNoop, LOGGER_ALL, LOGGER_CONSOLE, LOGGER_LEVELS, LOGGER_TAILS, LOGGER_TAILS_DEFAULT} from '../logger-types';
 import {LogConsoleService} from './log-console.service';
 
 describe(LogConsoleService.name, () => {
@@ -45,41 +44,17 @@ describe(LogConsoleService.name, () => {
         });
     });
 
-    describe('logger', () => {
-        it('should set/get the prefix', () => {
-            const log: LogService = TestBed.inject(LogService);
-            expect(log.getPrefix()).toBe('');
-            log.setPrefix('Example');
-            expect(log.getPrefix()).toBe('Example');
+    describe('method()', () => {
+        it('should use ConsoleNoop for unsupported methods', () => {
+            const log: LogConsoleService = TestBed.inject(LogService) as LogConsoleService;
+            expect(log.method('example')).toBe(ConsoleNoop);
         });
 
-        it('should create a new logger with prefix', () => {
-            let log: LogService = TestBed.inject(LogService);
-            expect(log.getPrefix()).toBe('');
-            log = log.withPrefix('AppComponent');
-            expect(log.getPrefix()).toBe('App:');
-            log = log.withPrefix('WidgetComponent');
-            expect(log.getPrefix()).toBe('App:Widget:');
-        });
-
-        it('should use a separator', () => {
-            let log: LogService = TestBed.inject(LogService);
-            log = log.withPrefix('AppComponent', '@');
-            expect(log.getPrefix()).toBe('App@');
-        });
-    });
-
-    describe('tapping', () => {
-        it('should create a tapper', () => {
-            const log: LogService = TestBed.inject(LogService);
-            const tapper = log.tap();
-            expect(tapper instanceof Tapper).toBeTruthy();
-        });
-
-        it('prefix should end with $', () => {
-            const log: LogService = TestBed.inject(LogService);
-            const prefix = log.withPrefix('App').withPrefix('Widget').tap().logger().getPrefix();
-            expect(prefix).toBe('App:Widget$');
+        it('should bind console methods', () => {
+            const log: LogConsoleService = TestBed.inject(LogService) as LogConsoleService;
+            MockConsole.METHODS.forEach(name => {
+                expect(log.method(name)).not.toBe(ConsoleNoop);
+            });
         });
     });
 });

@@ -1,8 +1,7 @@
 import {Inject, Injectable} from '@angular/core';
-import {ConsoleMethod, ConsoleMethods, ConsoleNoop, LOGGER_CONSOLE, LOGGER_LEVEL, LOGGER_LEVELS, TapperMethods} from '../logger-types';
-import {PrefixService} from '../prefix/prefix.service';
-import {Tapper} from '../tapper/tapper';
 import {LogService} from '../log/log.service';
+import {ConsoleMethod, ConsoleMethods, ConsoleNoop, LOGGER_CONSOLE, LOGGER_LEVEL, LOGGER_LEVELS} from '../logger-types';
+import {PrefixService} from '../prefix/prefix.service';
 
 const PREFIX_SEPARATOR = ':';
 
@@ -31,7 +30,7 @@ export class LogConsoleService extends LogService {
      */
     public get debug(): ConsoleMethod<void> {
         return this._levels & LOGGER_LEVEL.DEBUG
-            ? this._method('debug')
+            ? this.method('debug')
             : ConsoleNoop;
     }
 
@@ -40,7 +39,7 @@ export class LogConsoleService extends LogService {
      */
     public get error(): ConsoleMethod<void> {
         return this._levels & LOGGER_LEVEL.ERROR
-            ? this._method('error')
+            ? this.method('error')
             : ConsoleNoop;
     }
 
@@ -49,7 +48,7 @@ export class LogConsoleService extends LogService {
      */
     public get info(): ConsoleMethod<void> {
         return this._levels & LOGGER_LEVEL.INFO
-            ? this._method('info')
+            ? this.method('info')
             : ConsoleNoop;
     }
 
@@ -58,7 +57,7 @@ export class LogConsoleService extends LogService {
      */
     public get log(): ConsoleMethod<void> {
         return this._levels & LOGGER_LEVEL.LOG
-            ? this._method('log')
+            ? this.method('log')
             : ConsoleNoop;
     }
 
@@ -67,7 +66,7 @@ export class LogConsoleService extends LogService {
      */
     public get warn(): ConsoleMethod<void> {
         return this._levels & LOGGER_LEVEL.WARN
-            ? this._method('warn')
+            ? this.method('warn')
             : ConsoleNoop;
     }
 
@@ -79,6 +78,18 @@ export class LogConsoleService extends LogService {
     }
 
     /**
+     * Returns the logging function from the console object.
+     */
+    public method(name: string): ConsoleMethod<void> {
+        if (!this._console || !this._console[name]) {
+            return ConsoleNoop;
+        }
+        return this._prefixName
+            ? this._console[name].bind(this._console, this._prefixName)
+            : this._console[name].bind(this._console);
+    }
+
+    /**
      * Changes the loggers prefix.
      */
     public setPrefix(value: string): LogService {
@@ -87,31 +98,10 @@ export class LogConsoleService extends LogService {
     }
 
     /**
-     * Creates a tapper object that can log output from an observable.
-     */
-    public tap<TObservable>(): TapperMethods<TObservable> {
-        const log = this.withPrefix('$', '');
-        log.setPrefix(log.getPrefix().replace(/(:\$)$/, '$'));
-        return new Tapper<TObservable>(log);
-    }
-
-    /**
      * Creates a logger with an automatic prefix.
      */
     public withPrefix(value?: string, separator?: string): LogService {
         return new LogConsoleService(this._levels, this._console, this._prefixService)
             .setPrefix(this._prefixName + this._prefixService.prefix(value) + (separator === undefined ? PREFIX_SEPARATOR : separator));
-    }
-
-    /**
-     * Returns the logging function from the console object.
-     */
-    private _method(name: string): ConsoleMethod<void> {
-        if (!this._console || !this._console[name]) {
-            return ConsoleNoop;
-        }
-        return this._prefixName
-            ? this._console[name].bind(this._console, this._prefixName)
-            : this._console[name].bind(this._console);
     }
 }

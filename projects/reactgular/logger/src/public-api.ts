@@ -1,6 +1,5 @@
 export {LogService} from './log/log.service';
 export {PrefixService} from './prefix/prefix.service';
-export {Tapper} from './tapper/tapper';
 export {LoggerModule} from './logger.module';
 export {
     LOGGER_LEVELS,

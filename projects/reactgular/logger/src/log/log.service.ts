@@ -1,4 +1,4 @@
-import {ConsoleMethod, TapperMethods} from '../logger-types';
+import {ConsoleMethod} from '../logger-types';
 
 /**
  * Defines a base class which can double as an injection token in Angular. This allows the module to
@@ -39,11 +39,6 @@ export abstract class LogService {
      * Sets a new prefix for the logger.
      */
     public abstract setPrefix(value: string);
-
-    /**
-     * Creates an observable tapper
-     */
-    public abstract tap<TObservable>(): TapperMethods<TObservable>;
 
     /**
      * Creates a new logger and appends the prefix.

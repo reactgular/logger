@@ -1,6 +1,5 @@
 import {MockConsole} from '../../test/mock-console';
 import {ConsoleNoop} from '../logger-types';
-import {TapperNoop} from '../tapper-noop/tapper-noop';
 import {LogNoopService} from './log-noop.service';
 
 describe(LogNoopService.name, () => {
@@ -21,12 +20,5 @@ describe(LogNoopService.name, () => {
         expect(log.getPrefix()).toBe('');
         expect(log.withPrefix('Hello', '#')).toBe(log);
         expect(log.getPrefix()).toBe('');
-    });
-
-    it(`should provide ${TapperNoop.name}`, () => {
-        const log = new LogNoopService();
-        const tapper = log.tap();
-        expect(tapper instanceof TapperNoop).toBeTruthy();
-        expect(tapper.logger()).toBe(log);
     });
 });
