@@ -1,4 +1,4 @@
-import {MockConsole} from '../../tests/mock-console';
+import {MockConsole} from '../../test/mock-console';
 import {ConsoleNoop} from '../logger-types';
 import {TapperNoop} from '../tapper-noop/tapper-noop';
 import {LogNoopService} from './log-noop.service';

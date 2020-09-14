@@ -1,5 +1,5 @@
 import {Observable, OperatorFunction} from 'rxjs';
-import {MockConsole} from '../../tests/mock-console';
+import {MockConsole} from '../../test/mock-console';
 import {LogNoopService} from '../log-noop/log-noop.service';
 import {TapperNoop} from './tapper-noop';
 import {LogService} from '../log/log.service';

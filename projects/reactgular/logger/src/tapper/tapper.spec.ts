@@ -1,7 +1,7 @@
 import {TestBed} from '@angular/core/testing';
 import {of} from 'rxjs';
 import {filter, first, map} from 'rxjs/operators';
-import {MockConsole} from '../../tests/mock-console';
+import {MockConsole} from '../../test/mock-console';
 import {LogService} from '../log/log.service';
 import {LOGGER_ALL, LOGGER_CONSOLE, LOGGER_LEVELS} from '../logger-types';
 import {Tapper} from './tapper';
