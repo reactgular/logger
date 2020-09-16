@@ -1,6 +1,6 @@
 {
   "name": "@reactgular/logger",
-  "version": "2.0.0-beta.0",
+  "version": "2.0.0",
   "description": "Console logging utility for Angular project.",
   "author": "reactgular.com",
   "homepage": "https://reactgular.com/",
