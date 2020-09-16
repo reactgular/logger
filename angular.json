@@ -4,13 +4,13 @@
   "newProjectRoot": "projects",
   "projects": {
     "logger": {
-      "root": "library/logger",
-      "sourceRoot": "library/logger/src",
+      "root": "projects/reactgular/logger",
+      "sourceRoot": "projects/reactgular/logger/src",
       "projectType": "library",
       "prefix": "rg",
       "schematics": {
         "@schematics/angular:component": {
-          "styleext": "scss",
+          "style": "scss",
           "changeDetection": "OnPush",
           "flat": false
         },
@@ -28,24 +28,29 @@
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "library/tsconfig.lib.json",
-            "project": "library/ng-package.json"
+            "tsConfig": "projects/reactgular/logger/tsconfig.lib.json",
+            "project": "projects/reactgular/logger/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/reactgular/logger/tsconfig.lib.prod.json"
+            }
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "library/logger/test.ts",
-            "tsConfig": "library/tsconfig.spec.json",
-            "karmaConfig": "library/karma.conf.js"
+            "main": "projects/reactgular/logger/test/test.ts",
+            "tsConfig": "projects/reactgular/logger/tsconfig.spec.json",
+            "karmaConfig": "projects/reactgular/logger/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "library/tsconfig.lib.json",
-              "library/tsconfig.spec.json"
+              "projects/reactgular/logger/tsconfig.lib.json",
+              "projects/reactgular/logger/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"

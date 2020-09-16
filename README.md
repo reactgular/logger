@@ -1,13 +1,12 @@
-[![Build Status](https://travis-ci.org/reactgular/logger.svg?branch=master)](https://travis-ci.org/reactgular/logger)
-[![Coverage Status](https://coveralls.io/repos/github/reactgular/logger/badge.svg?branch=master)](https://coveralls.io/github/reactgular/logger?branch=master)
+[![Build Status](https://travis-ci.org/reactgular/logger.svg?branch=develop)](https://travis-ci.org/reactgular/logger)
+[![Coverage Status](https://coveralls.io/repos/github/reactgular/logger/badge.svg?branch=develop)](https://coveralls.io/github/reactgular/logger?branch=develop)
 [![npm version](https://badge.fury.io/js/%40reactgular%2Flogger.svg)](https://badge.fury.io/js/%40reactgular%2Flogger)
 
 ## What is Logger?
 
-Logger is a small Angular service that writes output to the browser's console. It helps make
+Logger is a small Angular service for writing output to the browser's console. It helps make
 console messages easier to filter by prefixing messages with the current class name. So if you have a component named `MainComponent` you
-can filter by `Main:` and see only console messages from that component. It also supports tapping *observables* so you can see how
-data is flowing through your application.
+can filter by `Main:` and see only console messages from that component.
 
 > Logger extends console so messages continue to display the current *filename* and *line number*.
 
@@ -27,13 +26,6 @@ export class MainComponent implements OnInit {
    public ngOnInit() {
       this._log.debug('Hello world!');
       // ^^^ outputs "Main: Hello world!"
-      
-      this._subject.pipe(
-         this._log.tap().debug('Hello world!')
-      ).subscribe();
-      
-      this._subject.next("Everyone!");
-      // ^^^ outputs "Main$ Hello world! Everyone!"
    }
 }
 ```
@@ -55,18 +47,13 @@ export class MainComponent implements OnInit {
   * [LogService.warn()](#logservicewarn)
   * [LogService.getPrefix()](#logservicegetprefix)
   * [LogService.setPrefix()](#logservicesetprefix)
-  * [LogService.tap()](#logservicetap)
   * [LogService.withPrefix()](#logservicewithprefix)
-- [TapperMethods](#tappermethods)
-  * [TapperMethods.debug/error/info/log/warn()](#tappermethodsdebugerrorinfologwarn)
-  * [TapperMethods.pipe()](#tappermethodspipe)
-  * [TapperMethods.logger()](#tappermethodslogger)
 
 ## Why another console logger for Angular? 
 
 I've been copying and pasting the same log service between projects for several years. Everything else I tried
 was either too complicated or *erased* the *file name* and *line number* from the browser's console output, and I just kept reusing my trusty
-logger code. I decided it was time to make it an official library that could be easily installed and reused.
+logger code. I decided it was time to make it a library that could be easily installed and reused.
 
 ### Simple
 
@@ -91,18 +78,15 @@ export class MainComponent {
 }
 ```
 
-The prefix value can be anything that you want, but using `MainComponent.name` means that the value is 
+The prefix value can be anything that you want, but using `MainComponent.name` means that the value will be 
 updated if you rename the class using an IDE that automatically updates all usages.
 
 ## Installation
 
-To get started, install the package from npm. The latest version (1.x) supports Angular 8.
+To get started, install the package from npm.
 
 ```bash
-npm install --save @reactgular/logger
-
-# or if you are using yarn
-yarn add @reactgular/logger
+npm install @reactgular/logger
 ```
 
 then in `app.module.ts`, import the `LoggerModule`:
@@ -123,9 +107,9 @@ When you include the module in the import, you can pass a configuration object o
 If you are lazy loading, you can just use the `LoggerModule` module.
 
 Options such as `enabled` can be passed to the module as the second argument in the `forRoot` method. When `enabled` is
-set to *false* the log service is replaced with a tiny *proxy* service that outputs nothing.
+set to *false* the log service gets replaced with a tiny *proxy* service and outputs nothing.
 
-It's important that you add `LoggerModule.forRoot()` at the root of your modules.
+It's important for you add `LoggerModule.forRoot()` at the root of your modules.
 
 ## LoggerConfig
 
@@ -158,7 +142,7 @@ constructor(log: LogService) {
 
 ## LogService Prefixes
 
-When you're using the `LogService` with Angular classes like components, services, pipes and etc. The name of those classes can be used to set the
+When you're using the `LogService` with Angular classes like components, services, pipes, etc. The name of those classes can be used to set the
 prefix string for each log message to the console. Using a prefix value of `"MainComponent"` can create *wide* console messages. So this function
 creates a new `LogService` object with a *trimmed* prefix where the *tail* strings have been removed.
 
@@ -176,8 +160,8 @@ export class MainComponent {
 }
 ```
 
-When *tail* strings are removed is configured in the `LoggerConfig` you used when calling `LoggerModule.forRoot()`. If you don't define an
-array of strings for `tails: string[]` then these default values are used.
+When you set the `tails` option in the `LoggerConfig` it replaces all the tails that are removed from prefixes. If you don't define an
+array of strings to `fails` then these default values will be used.
 
 ```typescript
 /**
@@ -194,7 +178,6 @@ import {LoggerModule, LOGGER_TRAILS_DEFAULT} from '@reactgular/logger';
 @NgModule({
   imports: [
     LoggerModule.forRoot({
-      enabled: !environment.production,
       tails: [...LOGGER_TAILS_DEFAULT, 'FooBar', 'Magic', 'Proxy']
     })
   ]
@@ -242,62 +225,6 @@ Returns the prefix string used by the `LogService` object.
 Sets a new prefix for the logger. This will change the *internal* prefix value used by the `LogService`. This function does not have the same
 effect as `withPrefix()` which returns a new `LogService` object with a trail strings removed for the prefix.
 
-### LogService.tap()
-
-Creates an observable tapper that can listen for emitted values and output them to the browser's console. See [TapperMethods](#tappermethods) for more information.
-
 ### LogService.withPrefix()
 
 Creates a new `LogService` object with the given prefix. 
-
-## TapperMethods
-
-Create a `TapperMethods` object by calling `LogService.tap()` inside the `pipe()` of an observable. A tapper subscribes to an outer observable, 
-and creates a new inner observable that will only emit values to the browser's console. You can apply observable operators to this inner observable 
-via the [pipe()](#tappermethodspipe) and they will have no side effects on the outer observable.
-
-For example, you can filter values:
-
-```typescript
-of(1,2,3,4,5).pipe(
-   logService.tap().pipe(filter(x => x === 3)).log()
-).subscribe();
-// prints "3" the console
-```
-
-The above applies a `filter()` operator to the tapper observable, but this filter has no side effects on the 
-original observable. Only output to the console is filter.
-
-### TapperMethods.debug/error/info/log/warn()
-
-The `TapperMethods` object has the same console methods as the `LogService`. The difference is that the tapper logging methods return an
-observable operator. That means that the tapper logging methods have to be used inside an `observable.pipe()` method.
-
-For example:
-
-```typescript
-of(1,2,3,4).pipe(
-   logService.tap().log()
-).subscribe();
-```
-
-Because the tapper has to create an operator function the browser's console can not report the correct file name and line number. You
-can use the `LogService` with a regular `tap()` operator if you need the file name, but you loose the ability to filter or map values
-before they are printed to the console.
-
-For example:
-
-```typescript
-of(1,2,3,4,5).pipe(
-  tap(val => logService.log(val))
-).subscribe()
-```
-
-### TapperMethods.pipe()
-
-Adds observable operators to the inner observable that is tapping into the outer observables. Operators added to the
-tapper will have no effect on the outer observable, but will be applied to the output for the console.
-
-### TapperMethods.logger()
-
-Returns the inner `LogService` used by the tapper for logging to the console.

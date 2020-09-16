@@ -1,10 +1,17 @@
 {
   "name": "@reactgular/logger",
-  "version": "1.0.3",
+  "version": "2.0.0",
   "description": "Console logging utility for Angular project.",
   "author": "reactgular.com",
   "homepage": "https://reactgular.com/",
   "license": "MIT",
+  "keywords": [
+    "angular",
+    "angular-library",
+    "logging",
+    "console",
+    "logger"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/reactgular/logger"
@@ -12,14 +19,11 @@
   "bugs": {
     "url": "https://github.com/reactgular/logger/issues"
   },
-  "keywords": [
-    "angular",
-    "logging",
-    "console",
-    "logger"
-  ],
+  "dependencies": {
+    "tslib": "^2.0.0"
+  },
   "peerDependencies": {
-    "@angular/common": "^8.0.0",
-    "@angular/core": "^8.0.0"
+    "@angular/common": "^10.0.0",
+    "@angular/core": "^10.0.0"
   }
 }
